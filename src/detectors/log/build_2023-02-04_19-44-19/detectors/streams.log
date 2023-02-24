@@ -1,0 +1,69 @@
+[0.570s] Invoking command in '/home/robot134/robotws/src/detectors': PYTHONPATH=/home/robot134/robotws/src/detectors/build/detectors/prefix_override:/home/robot134/robotws/src/detectors/install/detectors/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py egg_info --egg-base build/detectors build --build-base /home/robot134/robotws/src/detectors/build/detectors/build install --record /home/robot134/robotws/src/detectors/build/detectors/install.log --single-version-externally-managed
+[0.789s] running egg_info
+[0.790s] creating build/detectors/detectors.egg-info
+[0.790s] writing build/detectors/detectors.egg-info/PKG-INFO
+[0.791s] writing dependency_links to build/detectors/detectors.egg-info/dependency_links.txt
+[0.791s] writing entry points to build/detectors/detectors.egg-info/entry_points.txt
+[0.791s] writing requirements to build/detectors/detectors.egg-info/requires.txt
+[0.791s] writing top-level names to build/detectors/detectors.egg-info/top_level.txt
+[0.791s] writing manifest file 'build/detectors/detectors.egg-info/SOURCES.txt'
+[0.793s] reading manifest file 'build/detectors/detectors.egg-info/SOURCES.txt'
+[0.794s] writing manifest file 'build/detectors/detectors.egg-info/SOURCES.txt'
+[0.794s] running build
+[0.794s] running build_py
+[0.794s] creating /home/robot134/robotws/src/detectors/build/detectors/build
+[0.794s] creating /home/robot134/robotws/src/detectors/build/detectors/build/lib
+[0.794s] creating /home/robot134/robotws/src/detectors/build/detectors/build/lib/detectors
+[0.794s] copying detectors/writearuco.py -> /home/robot134/robotws/src/detectors/build/detectors/build/lib/detectors
+[0.795s] copying detectors/__init__.py -> /home/robot134/robotws/src/detectors/build/detectors/build/lib/detectors
+[0.795s] copying detectors/facedetector.py -> /home/robot134/robotws/src/detectors/build/detectors/build/lib/detectors
+[0.795s] copying detectors/depthincenter.py -> /home/robot134/robotws/src/detectors/build/detectors/build/lib/detectors
+[0.795s] copying detectors/detectaruco.py -> /home/robot134/robotws/src/detectors/build/detectors/build/lib/detectors
+[0.795s] copying detectors/balldetector.py -> /home/robot134/robotws/src/detectors/build/detectors/build/lib/detectors
+[0.795s] running install
+[0.795s] /usr/lib/python3/dist-packages/setuptools/command/install.py:34: SetuptoolsDeprecationWarning: setup.py install is deprecated. Use build and pip and other standards-based tools.
+[0.796s]   warnings.warn(
+[0.796s] running install_lib
+[0.797s] creating /home/robot134/robotws/src/detectors/install/detectors/lib/python3.10/site-packages/detectors
+[0.797s] copying /home/robot134/robotws/src/detectors/build/detectors/build/lib/detectors/writearuco.py -> /home/robot134/robotws/src/detectors/install/detectors/lib/python3.10/site-packages/detectors
+[0.797s] copying /home/robot134/robotws/src/detectors/build/detectors/build/lib/detectors/__init__.py -> /home/robot134/robotws/src/detectors/install/detectors/lib/python3.10/site-packages/detectors
+[0.797s] copying /home/robot134/robotws/src/detectors/build/detectors/build/lib/detectors/facedetector.py -> /home/robot134/robotws/src/detectors/install/detectors/lib/python3.10/site-packages/detectors
+[0.798s] copying /home/robot134/robotws/src/detectors/build/detectors/build/lib/detectors/depthincenter.py -> /home/robot134/robotws/src/detectors/install/detectors/lib/python3.10/site-packages/detectors
+[0.798s] copying /home/robot134/robotws/src/detectors/build/detectors/build/lib/detectors/detectaruco.py -> /home/robot134/robotws/src/detectors/install/detectors/lib/python3.10/site-packages/detectors
+[0.798s] copying /home/robot134/robotws/src/detectors/build/detectors/build/lib/detectors/balldetector.py -> /home/robot134/robotws/src/detectors/install/detectors/lib/python3.10/site-packages/detectors
+[0.798s] byte-compiling /home/robot134/robotws/src/detectors/install/detectors/lib/python3.10/site-packages/detectors/writearuco.py to writearuco.cpython-310.pyc
+[0.799s] byte-compiling /home/robot134/robotws/src/detectors/install/detectors/lib/python3.10/site-packages/detectors/__init__.py to __init__.cpython-310.pyc
+[0.799s] byte-compiling /home/robot134/robotws/src/detectors/install/detectors/lib/python3.10/site-packages/detectors/facedetector.py to facedetector.cpython-310.pyc
+[0.800s] byte-compiling /home/robot134/robotws/src/detectors/install/detectors/lib/python3.10/site-packages/detectors/depthincenter.py to depthincenter.cpython-310.pyc
+[0.800s] byte-compiling /home/robot134/robotws/src/detectors/install/detectors/lib/python3.10/site-packages/detectors/detectaruco.py to detectaruco.cpython-310.pyc
+[0.801s] byte-compiling /home/robot134/robotws/src/detectors/install/detectors/lib/python3.10/site-packages/detectors/balldetector.py to balldetector.cpython-310.pyc
+[0.802s] running install_data
+[0.802s] creating /home/robot134/robotws/src/detectors/install/detectors/share/ament_index
+[0.802s] creating /home/robot134/robotws/src/detectors/install/detectors/share/ament_index/resource_index
+[0.803s] creating /home/robot134/robotws/src/detectors/install/detectors/share/ament_index/resource_index/packages
+[0.803s] copying resource/detectors -> /home/robot134/robotws/src/detectors/install/detectors/share/ament_index/resource_index/packages
+[0.803s] copying package.xml -> /home/robot134/robotws/src/detectors/install/detectors/share/detectors
+[0.803s] creating /home/robot134/robotws/src/detectors/install/detectors/share/detectors/rviz
+[0.803s] copying rviz/viewpointcloud.rviz -> /home/robot134/robotws/src/detectors/install/detectors/share/detectors/rviz
+[0.803s] copying rviz/viewurdfandimage.rviz -> /home/robot134/robotws/src/detectors/install/detectors/share/detectors/rviz
+[0.803s] creating /home/robot134/robotws/src/detectors/install/detectors/share/detectors/launch
+[0.804s] copying launch/start_usbcam.launch.py -> /home/robot134/robotws/src/detectors/install/detectors/share/detectors/launch
+[0.804s] copying launch/realsense_pointcloud.launch.py -> /home/robot134/robotws/src/detectors/install/detectors/share/detectors/launch
+[0.804s] copying launch/balldetector.launch.py -> /home/robot134/robotws/src/detectors/install/detectors/share/detectors/launch
+[0.804s] copying launch/view_usbcam_showimage.launch.py -> /home/robot134/robotws/src/detectors/install/detectors/share/detectors/launch
+[0.804s] copying launch/view_usbcam_rviz.launch.py -> /home/robot134/robotws/src/detectors/install/detectors/share/detectors/launch
+[0.804s] copying launch/realsense_plain.launch.py -> /home/robot134/robotws/src/detectors/install/detectors/share/detectors/launch
+[0.804s] copying launch/detectaruco.launch.py -> /home/robot134/robotws/src/detectors/install/detectors/share/detectors/launch
+[0.805s] copying launch/facedetector.launch.py -> /home/robot134/robotws/src/detectors/install/detectors/share/detectors/launch
+[0.805s] copying launch/realsense_aligned.launch.py -> /home/robot134/robotws/src/detectors/install/detectors/share/detectors/launch
+[0.805s] copying launch/view_usbcam_imageview.launch.py -> /home/robot134/robotws/src/detectors/install/detectors/share/detectors/launch
+[0.805s] running install_egg_info
+[0.808s] Copying build/detectors/detectors.egg-info to /home/robot134/robotws/src/detectors/install/detectors/lib/python3.10/site-packages/detectors-0.0.0-py3.10.egg-info
+[0.808s] running install_scripts
+[0.826s] Installing balldetector script to /home/robot134/robotws/src/detectors/install/detectors/lib/detectors
+[0.826s] Installing depthincenter script to /home/robot134/robotws/src/detectors/install/detectors/lib/detectors
+[0.826s] Installing detectaruco script to /home/robot134/robotws/src/detectors/install/detectors/lib/detectors
+[0.826s] Installing facedetector script to /home/robot134/robotws/src/detectors/install/detectors/lib/detectors
+[0.826s] Installing writearuco script to /home/robot134/robotws/src/detectors/install/detectors/lib/detectors
+[0.827s] writing list of installed files to '/home/robot134/robotws/src/detectors/build/detectors/install.log'
+[0.853s] Invoked command in '/home/robot134/robotws/src/detectors' returned '0': PYTHONPATH=/home/robot134/robotws/src/detectors/build/detectors/prefix_override:/home/robot134/robotws/src/detectors/install/detectors/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py egg_info --egg-base build/detectors build --build-base /home/robot134/robotws/src/detectors/build/detectors/build install --record /home/robot134/robotws/src/detectors/build/detectors/install.log --single-version-externally-managed

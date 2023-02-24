@@ -73,12 +73,12 @@ class DemoNode(Node):
         self.q_safe = np.array([0, -np.pi/2, np.pi/2])
         
         # Grab movement segments for task
-        # self.segments_for_x()
-        self.segments_for_line()
+        self.segments_for_x()
+        #self.segments_for_line()
         self.cseg = 0
 
         # Subscribe to the flip command
-        self.flipsub = self.create_subscription(Empty, '/flip', self.cb_flip, 1)
+        #self.flipsub = self.create_subscription(Empty, '/flip', self.cb_flip, 1)
 
         # Create a timer to keep calculating/sending commands.
         rate       = RATE
@@ -284,7 +284,7 @@ class DemoNode(Node):
         #print("")
 
         # if there's contact detected, the arm flips
-        self.check_contact(self.grabpos, t)
+        #self.check_contact(self.grabpos, t)
 
         sendEff = self.gravity(self.grabpos)
 
