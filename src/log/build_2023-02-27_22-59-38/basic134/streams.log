@@ -1,0 +1,28 @@
+[1.289s] Invoking command in '/home/robot134/robotws/src/build/basic134': PYTHONPATH=/home/robot134/robotws/src/build/basic134/prefix_override:/home/robot134/robotws/src/install/basic134/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py develop --editable --build-directory /home/robot134/robotws/src/build/basic134/build --no-deps install_data
+[1.555s] running develop
+[1.556s] /usr/lib/python3/dist-packages/setuptools/command/easy_install.py:158: EasyInstallDeprecationWarning: easy_install command is deprecated. Use build and pip and other standards-based tools.
+[1.556s]   warnings.warn(
+[1.557s] /usr/lib/python3/dist-packages/setuptools/command/install.py:34: SetuptoolsDeprecationWarning: setup.py install is deprecated. Use build and pip and other standards-based tools.
+[1.557s]   warnings.warn(
+[1.613s] /usr/lib/python3/dist-packages/pkg_resources/__init__.py:116: PkgResourcesDeprecationWarning: 1.16.0-unknown is an invalid version and will not be supported in a future release
+[1.613s]   warnings.warn(
+[1.614s] /usr/lib/python3/dist-packages/pkg_resources/__init__.py:116: PkgResourcesDeprecationWarning: 1.1build1 is an invalid version and will not be supported in a future release
+[1.614s]   warnings.warn(
+[1.614s] /usr/lib/python3/dist-packages/pkg_resources/__init__.py:116: PkgResourcesDeprecationWarning: 0.1.43ubuntu1 is an invalid version and will not be supported in a future release
+[1.614s]   warnings.warn(
+[1.730s] running egg_info
+[1.730s] writing basic134.egg-info/PKG-INFO
+[1.731s] writing dependency_links to basic134.egg-info/dependency_links.txt
+[1.731s] writing entry points to basic134.egg-info/entry_points.txt
+[1.731s] writing requirements to basic134.egg-info/requires.txt
+[1.731s] writing top-level names to basic134.egg-info/top_level.txt
+[1.733s] reading manifest file 'basic134.egg-info/SOURCES.txt'
+[1.734s] writing manifest file 'basic134.egg-info/SOURCES.txt'
+[1.735s] running build_ext
+[1.735s] Creating /home/robot134/robotws/src/install/basic134/lib/python3.10/site-packages/basic134.egg-link (link to .)
+[1.736s] Installing demo134 script to /home/robot134/robotws/src/install/basic134/lib/basic134
+[1.736s] 
+[1.736s] Installed /home/robot134/robotws/src/build/basic134
+[1.736s] running install_data
+[1.737s] copying urdf/example.urdf -> /home/robot134/robotws/src/install/basic134/share/basic134/urdf
+[1.765s] Invoked command in '/home/robot134/robotws/src/build/basic134' returned '0': PYTHONPATH=/home/robot134/robotws/src/build/basic134/prefix_override:/home/robot134/robotws/src/install/basic134/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py develop --editable --build-directory /home/robot134/robotws/src/build/basic134/build --no-deps install_data

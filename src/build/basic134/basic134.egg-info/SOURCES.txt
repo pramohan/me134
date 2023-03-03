@@ -5,6 +5,7 @@ basic134/KinematicChain.py
 basic134/TransformHelpers.py
 basic134/__init__.py
 basic134/demo134.py
+basic134/operation.py
 basic134/splines.py
 basic134.egg-info/PKG-INFO
 basic134.egg-info/SOURCES.txt
@@ -21,6 +22,8 @@ meshes/arm_base.stl
 meshes/basiclink.dae
 meshes/basiclink.stl
 meshes/lbracket.STL
+meshes/link.STL
+meshes/link_short.STL
 meshes/lowerarm.stl
 resource/basic134
 rviz/viewurdf.rviz

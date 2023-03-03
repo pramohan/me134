@@ -1,0 +1,245 @@
+[0.275s] DEBUG:colcon:Command line arguments: ['/usr/bin/colcon', 'build', '--symlink-install']
+[0.275s] DEBUG:colcon:Parsed command line arguments: Namespace(log_base=None, log_level=None, verb_name='build', build_base='build', install_base='install', merge_install=False, symlink_install=True, test_result_base=None, continue_on_error=False, executor='parallel', parallel_workers=4, event_handlers=None, ignore_user_meta=False, metas=['./colcon.meta'], base_paths=['.'], packages_ignore=None, packages_ignore_regex=None, paths=None, packages_up_to=None, packages_up_to_regex=None, packages_above=None, packages_above_and_dependencies=None, packages_above_depth=None, packages_select_by_dep=None, packages_skip_by_dep=None, packages_skip_up_to=None, packages_select_build_failed=False, packages_skip_build_finished=False, packages_select_test_failures=False, packages_skip_test_passed=False, packages_select=None, packages_skip=None, packages_select_regex=None, packages_skip_regex=None, packages_start=None, packages_end=None, allow_overriding=[], cmake_args=None, cmake_target=None, cmake_target_skip_unavailable=False, cmake_clean_cache=False, cmake_clean_first=False, cmake_force_configure=False, ament_cmake_args=None, catkin_cmake_args=None, catkin_skip_building_tests=False, verb_parser=<colcon_defaults.argument_parser.defaults.DefaultArgumentsDecorator object at 0x7f77b475dcc0>, verb_extension=<colcon_core.verb.build.BuildVerb object at 0x7f77b510e920>, main=<bound method BuildVerb.main of <colcon_core.verb.build.BuildVerb object at 0x7f77b510e920>>)
+[0.301s] Level 1:colcon.colcon_core.package_discovery:discover_packages(colcon_meta) check parameters
+[0.301s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) check parameters
+[0.301s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) check parameters
+[0.301s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) check parameters
+[0.301s] Level 1:colcon.colcon_core.package_discovery:discover_packages(colcon_meta) discover
+[0.301s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) discover
+[0.301s] INFO:colcon.colcon_core.package_discovery:Crawling recursively for packages in '/home/robot134/robotws/src'
+[0.301s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['ignore', 'ignore_ament_install']
+[0.301s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ignore'
+[0.301s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ignore_ament_install'
+[0.302s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['colcon_pkg']
+[0.302s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'colcon_pkg'
+[0.302s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['colcon_meta']
+[0.302s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'colcon_meta'
+[0.302s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['ros']
+[0.302s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ros'
+[0.311s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['cmake', 'python']
+[0.311s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'cmake'
+[0.311s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'python'
+[0.311s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['python_setup_py']
+[0.311s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'python_setup_py'
+[0.312s] Level 1:colcon.colcon_core.package_identification:_identify(basic134) by extensions ['ignore', 'ignore_ament_install']
+[0.312s] Level 1:colcon.colcon_core.package_identification:_identify(basic134) by extension 'ignore'
+[0.312s] Level 1:colcon.colcon_core.package_identification:_identify(basic134) by extension 'ignore_ament_install'
+[0.312s] Level 1:colcon.colcon_core.package_identification:_identify(basic134) by extensions ['colcon_pkg']
+[0.312s] Level 1:colcon.colcon_core.package_identification:_identify(basic134) by extension 'colcon_pkg'
+[0.312s] Level 1:colcon.colcon_core.package_identification:_identify(basic134) by extensions ['colcon_meta']
+[0.312s] Level 1:colcon.colcon_core.package_identification:_identify(basic134) by extension 'colcon_meta'
+[0.312s] Level 1:colcon.colcon_core.package_identification:_identify(basic134) by extensions ['ros']
+[0.312s] Level 1:colcon.colcon_core.package_identification:_identify(basic134) by extension 'ros'
+[0.314s] DEBUG:colcon.colcon_core.package_identification:Package 'basic134' with type 'ros.ament_python' and name 'basic134'
+[0.315s] Level 1:colcon.colcon_core.package_identification:_identify(build) by extensions ['ignore', 'ignore_ament_install']
+[0.315s] Level 1:colcon.colcon_core.package_identification:_identify(build) by extension 'ignore'
+[0.315s] Level 1:colcon.colcon_core.package_identification:_identify(build) ignored
+[0.315s] Level 1:colcon.colcon_core.package_identification:_identify(contact-bag) by extensions ['ignore', 'ignore_ament_install']
+[0.315s] Level 1:colcon.colcon_core.package_identification:_identify(contact-bag) by extension 'ignore'
+[0.315s] Level 1:colcon.colcon_core.package_identification:_identify(contact-bag) by extension 'ignore_ament_install'
+[0.315s] Level 1:colcon.colcon_core.package_identification:_identify(contact-bag) by extensions ['colcon_pkg']
+[0.315s] Level 1:colcon.colcon_core.package_identification:_identify(contact-bag) by extension 'colcon_pkg'
+[0.315s] Level 1:colcon.colcon_core.package_identification:_identify(contact-bag) by extensions ['colcon_meta']
+[0.315s] Level 1:colcon.colcon_core.package_identification:_identify(contact-bag) by extension 'colcon_meta'
+[0.315s] Level 1:colcon.colcon_core.package_identification:_identify(contact-bag) by extensions ['ros']
+[0.315s] Level 1:colcon.colcon_core.package_identification:_identify(contact-bag) by extension 'ros'
+[0.315s] Level 1:colcon.colcon_core.package_identification:_identify(contact-bag) by extensions ['cmake', 'python']
+[0.315s] Level 1:colcon.colcon_core.package_identification:_identify(contact-bag) by extension 'cmake'
+[0.315s] Level 1:colcon.colcon_core.package_identification:_identify(contact-bag) by extension 'python'
+[0.315s] Level 1:colcon.colcon_core.package_identification:_identify(contact-bag) by extensions ['python_setup_py']
+[0.316s] Level 1:colcon.colcon_core.package_identification:_identify(contact-bag) by extension 'python_setup_py'
+[0.316s] Level 1:colcon.colcon_core.package_identification:_identify(demo134) by extensions ['ignore', 'ignore_ament_install']
+[0.316s] Level 1:colcon.colcon_core.package_identification:_identify(demo134) by extension 'ignore'
+[0.316s] Level 1:colcon.colcon_core.package_identification:_identify(demo134) ignored
+[0.316s] Level 1:colcon.colcon_core.package_identification:_identify(detectors) by extensions ['ignore', 'ignore_ament_install']
+[0.316s] Level 1:colcon.colcon_core.package_identification:_identify(detectors) by extension 'ignore'
+[0.316s] Level 1:colcon.colcon_core.package_identification:_identify(detectors) ignored
+[0.316s] Level 1:colcon.colcon_core.package_identification:_identify(hebiros) by extensions ['ignore', 'ignore_ament_install']
+[0.316s] Level 1:colcon.colcon_core.package_identification:_identify(hebiros) by extension 'ignore'
+[0.316s] Level 1:colcon.colcon_core.package_identification:_identify(hebiros) by extension 'ignore_ament_install'
+[0.316s] Level 1:colcon.colcon_core.package_identification:_identify(hebiros) by extensions ['colcon_pkg']
+[0.316s] Level 1:colcon.colcon_core.package_identification:_identify(hebiros) by extension 'colcon_pkg'
+[0.316s] Level 1:colcon.colcon_core.package_identification:_identify(hebiros) by extensions ['colcon_meta']
+[0.316s] Level 1:colcon.colcon_core.package_identification:_identify(hebiros) by extension 'colcon_meta'
+[0.316s] Level 1:colcon.colcon_core.package_identification:_identify(hebiros) by extensions ['ros']
+[0.316s] Level 1:colcon.colcon_core.package_identification:_identify(hebiros) by extension 'ros'
+[0.317s] DEBUG:colcon.colcon_core.package_identification:Package 'hebiros' with type 'ros.ament_python' and name 'hebiros'
+[0.317s] Level 1:colcon.colcon_core.package_identification:_identify(install) by extensions ['ignore', 'ignore_ament_install']
+[0.317s] Level 1:colcon.colcon_core.package_identification:_identify(install) by extension 'ignore'
+[0.317s] Level 1:colcon.colcon_core.package_identification:_identify(install) ignored
+[0.317s] Level 1:colcon.colcon_core.package_identification:_identify(log) by extensions ['ignore', 'ignore_ament_install']
+[0.317s] Level 1:colcon.colcon_core.package_identification:_identify(log) by extension 'ignore'
+[0.317s] Level 1:colcon.colcon_core.package_identification:_identify(log) ignored
+[0.317s] Level 1:colcon.colcon_core.package_identification:_identify(operation) by extensions ['ignore', 'ignore_ament_install']
+[0.318s] Level 1:colcon.colcon_core.package_identification:_identify(operation) by extension 'ignore'
+[0.318s] Level 1:colcon.colcon_core.package_identification:_identify(operation) by extension 'ignore_ament_install'
+[0.318s] Level 1:colcon.colcon_core.package_identification:_identify(operation) by extensions ['colcon_pkg']
+[0.318s] Level 1:colcon.colcon_core.package_identification:_identify(operation) by extension 'colcon_pkg'
+[0.318s] Level 1:colcon.colcon_core.package_identification:_identify(operation) by extensions ['colcon_meta']
+[0.318s] Level 1:colcon.colcon_core.package_identification:_identify(operation) by extension 'colcon_meta'
+[0.318s] Level 1:colcon.colcon_core.package_identification:_identify(operation) by extensions ['ros']
+[0.318s] Level 1:colcon.colcon_core.package_identification:_identify(operation) by extension 'ros'
+[0.319s] DEBUG:colcon.colcon_core.package_identification:Package 'operation' with type 'ros.ament_python' and name 'operation'
+[0.320s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) using defaults
+[0.320s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) discover
+[0.320s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) using defaults
+[0.320s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) discover
+[0.320s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) using defaults
+[0.340s] Level 1:colcon.colcon_core.package_discovery:discover_packages(prefix_path) check parameters
+[0.340s] Level 1:colcon.colcon_core.package_discovery:discover_packages(prefix_path) discover
+[0.342s] DEBUG:colcon.colcon_installed_package_information.package_discovery:Found 3 installed packages in /home/robot134/robotws/install
+[0.344s] DEBUG:colcon.colcon_installed_package_information.package_discovery:Found 411 installed packages in /opt/ros/humble
+[0.346s] Level 1:colcon.colcon_core.package_discovery:discover_packages(prefix_path) using defaults
+[0.423s] Level 5:colcon.colcon_core.verb:set package 'basic134' build argument 'cmake_args' from command line to 'None'
+[0.423s] Level 5:colcon.colcon_core.verb:set package 'basic134' build argument 'cmake_target' from command line to 'None'
+[0.423s] Level 5:colcon.colcon_core.verb:set package 'basic134' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.423s] Level 5:colcon.colcon_core.verb:set package 'basic134' build argument 'cmake_clean_cache' from command line to 'False'
+[0.423s] Level 5:colcon.colcon_core.verb:set package 'basic134' build argument 'cmake_clean_first' from command line to 'False'
+[0.423s] Level 5:colcon.colcon_core.verb:set package 'basic134' build argument 'cmake_force_configure' from command line to 'False'
+[0.423s] Level 5:colcon.colcon_core.verb:set package 'basic134' build argument 'ament_cmake_args' from command line to 'None'
+[0.423s] Level 5:colcon.colcon_core.verb:set package 'basic134' build argument 'catkin_cmake_args' from command line to 'None'
+[0.423s] Level 5:colcon.colcon_core.verb:set package 'basic134' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.423s] DEBUG:colcon.colcon_core.verb:Building package 'basic134' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/robot134/robotws/src/build/basic134', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/robot134/robotws/src/install/basic134', 'merge_install': False, 'path': '/home/robot134/robotws/src/basic134', 'symlink_install': True, 'test_result_base': None}
+[0.425s] Level 5:colcon.colcon_core.verb:set package 'hebiros' build argument 'cmake_args' from command line to 'None'
+[0.425s] Level 5:colcon.colcon_core.verb:set package 'hebiros' build argument 'cmake_target' from command line to 'None'
+[0.425s] Level 5:colcon.colcon_core.verb:set package 'hebiros' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.425s] Level 5:colcon.colcon_core.verb:set package 'hebiros' build argument 'cmake_clean_cache' from command line to 'False'
+[0.425s] Level 5:colcon.colcon_core.verb:set package 'hebiros' build argument 'cmake_clean_first' from command line to 'False'
+[0.425s] Level 5:colcon.colcon_core.verb:set package 'hebiros' build argument 'cmake_force_configure' from command line to 'False'
+[0.425s] Level 5:colcon.colcon_core.verb:set package 'hebiros' build argument 'ament_cmake_args' from command line to 'None'
+[0.425s] Level 5:colcon.colcon_core.verb:set package 'hebiros' build argument 'catkin_cmake_args' from command line to 'None'
+[0.425s] Level 5:colcon.colcon_core.verb:set package 'hebiros' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.425s] DEBUG:colcon.colcon_core.verb:Building package 'hebiros' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/robot134/robotws/src/build/hebiros', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/robot134/robotws/src/install/hebiros', 'merge_install': False, 'path': '/home/robot134/robotws/src/hebiros', 'symlink_install': True, 'test_result_base': None}
+[0.427s] Level 5:colcon.colcon_core.verb:set package 'operation' build argument 'cmake_args' from command line to 'None'
+[0.427s] Level 5:colcon.colcon_core.verb:set package 'operation' build argument 'cmake_target' from command line to 'None'
+[0.427s] Level 5:colcon.colcon_core.verb:set package 'operation' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.427s] Level 5:colcon.colcon_core.verb:set package 'operation' build argument 'cmake_clean_cache' from command line to 'False'
+[0.427s] Level 5:colcon.colcon_core.verb:set package 'operation' build argument 'cmake_clean_first' from command line to 'False'
+[0.427s] Level 5:colcon.colcon_core.verb:set package 'operation' build argument 'cmake_force_configure' from command line to 'False'
+[0.427s] Level 5:colcon.colcon_core.verb:set package 'operation' build argument 'ament_cmake_args' from command line to 'None'
+[0.427s] Level 5:colcon.colcon_core.verb:set package 'operation' build argument 'catkin_cmake_args' from command line to 'None'
+[0.427s] Level 5:colcon.colcon_core.verb:set package 'operation' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.427s] DEBUG:colcon.colcon_core.verb:Building package 'operation' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/robot134/robotws/src/build/operation', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/robot134/robotws/src/install/operation', 'merge_install': False, 'path': '/home/robot134/robotws/src/operation', 'symlink_install': True, 'test_result_base': None}
+[0.428s] INFO:colcon.colcon_core.executor:Executing jobs using 'parallel' executor
+[0.432s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:run_until_complete
+[0.432s] INFO:colcon.colcon_ros.task.ament_python.build:Building ROS package in '/home/robot134/robotws/src/basic134' with build type 'ament_python'
+[0.432s] Level 1:colcon.colcon_core.shell:create_environment_hook('basic134', 'ament_prefix_path')
+[0.437s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_core.shell.bat': Not used on non-Windows systems
+[0.437s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/robot134/robotws/src/install/basic134/share/basic134/hook/ament_prefix_path.ps1'
+[0.438s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/robot134/robotws/src/install/basic134/share/basic134/hook/ament_prefix_path.dsv'
+[0.438s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/robot134/robotws/src/install/basic134/share/basic134/hook/ament_prefix_path.sh'
+[0.440s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[0.440s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[0.444s] INFO:colcon.colcon_ros.task.ament_python.build:Building ROS package in '/home/robot134/robotws/src/hebiros' with build type 'ament_python'
+[0.445s] Level 1:colcon.colcon_core.shell:create_environment_hook('hebiros', 'ament_prefix_path')
+[0.446s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/robot134/robotws/src/install/hebiros/share/hebiros/hook/ament_prefix_path.ps1'
+[0.447s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/robot134/robotws/src/install/hebiros/share/hebiros/hook/ament_prefix_path.dsv'
+[0.448s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/robot134/robotws/src/install/hebiros/share/hebiros/hook/ament_prefix_path.sh'
+[0.449s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[0.449s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[0.453s] INFO:colcon.colcon_ros.task.ament_python.build:Building ROS package in '/home/robot134/robotws/src/operation' with build type 'ament_python'
+[0.453s] Level 1:colcon.colcon_core.shell:create_environment_hook('operation', 'ament_prefix_path')
+[0.455s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/robot134/robotws/src/install/operation/share/operation/hook/ament_prefix_path.ps1'
+[0.455s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/robot134/robotws/src/install/operation/share/operation/hook/ament_prefix_path.dsv'
+[0.455s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/robot134/robotws/src/install/operation/share/operation/hook/ament_prefix_path.sh'
+[0.458s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[0.458s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[0.701s] INFO:colcon.colcon_core.task.python.build:Building Python package in '/home/robot134/robotws/src/basic134'
+[0.702s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[0.702s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[0.938s] INFO:colcon.colcon_core.task.python.build:Building Python package in '/home/robot134/robotws/src/hebiros'
+[0.940s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[0.940s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[1.179s] INFO:colcon.colcon_core.task.python.build:Building Python package in '/home/robot134/robotws/src/operation'
+[1.180s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[1.180s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[1.548s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/robot134/robotws/src/build/operation': PYTHONPATH=/home/robot134/robotws/src/build/operation/prefix_override:/home/robot134/robotws/src/install/operation/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py develop --editable --build-directory /home/robot134/robotws/src/build/operation/build --no-deps install_data
+[1.672s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/robot134/robotws/src/build/hebiros': PYTHONPATH=/home/robot134/robotws/src/build/hebiros/prefix_override:/home/robot134/robotws/src/install/hebiros/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py develop --editable --build-directory /home/robot134/robotws/src/build/hebiros/build --no-deps install_data
+[1.719s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/robot134/robotws/src/build/basic134': PYTHONPATH=/home/robot134/robotws/src/build/basic134/prefix_override:/home/robot134/robotws/src/install/basic134/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py develop --editable --build-directory /home/robot134/robotws/src/build/basic134/build --no-deps install_data
+[2.013s] Level 1:colcon.colcon_core.shell:create_environment_hook('operation', 'pythonpath_develop')
+[2.015s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/robot134/robotws/src/build/operation/share/operation/hook/pythonpath_develop.ps1'
+[2.015s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/robot134/robotws/src/build/operation' returned '0': PYTHONPATH=/home/robot134/robotws/src/build/operation/prefix_override:/home/robot134/robotws/src/install/operation/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py develop --editable --build-directory /home/robot134/robotws/src/build/operation/build --no-deps install_data
+[2.016s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/robot134/robotws/src/build/operation/share/operation/hook/pythonpath_develop.dsv'
+[2.016s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/robot134/robotws/src/build/operation/share/operation/hook/pythonpath_develop.sh'
+[2.022s] Level 1:colcon.colcon_core.environment:checking '/home/robot134/robotws/src/install/operation' for CMake module files
+[2.022s] Level 1:colcon.colcon_core.environment:checking '/home/robot134/robotws/src/install/operation' for CMake config files
+[2.023s] Level 1:colcon.colcon_core.environment:checking '/home/robot134/robotws/src/install/operation/lib'
+[2.023s] Level 1:colcon.colcon_core.environment:checking '/home/robot134/robotws/src/install/operation/bin'
+[2.023s] Level 1:colcon.colcon_core.environment:checking '/home/robot134/robotws/src/install/operation/lib/pkgconfig/operation.pc'
+[2.023s] Level 1:colcon.colcon_core.environment:checking '/home/robot134/robotws/src/install/operation/lib/python3.10/site-packages'
+[2.023s] Level 1:colcon.colcon_core.shell:create_environment_hook('operation', 'pythonpath')
+[2.025s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/robot134/robotws/src/install/operation/share/operation/hook/pythonpath.ps1'
+[2.025s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/robot134/robotws/src/install/operation/share/operation/hook/pythonpath.dsv'
+[2.025s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/robot134/robotws/src/install/operation/share/operation/hook/pythonpath.sh'
+[2.026s] Level 1:colcon.colcon_core.environment:checking '/home/robot134/robotws/src/install/operation/bin'
+[2.026s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(operation)
+[2.028s] INFO:colcon.colcon_core.shell:Creating package script '/home/robot134/robotws/src/install/operation/share/operation/package.ps1'
+[2.029s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/robot134/robotws/src/install/operation/share/operation/package.dsv'
+[2.030s] INFO:colcon.colcon_core.shell:Creating package script '/home/robot134/robotws/src/install/operation/share/operation/package.sh'
+[2.031s] INFO:colcon.colcon_core.shell:Creating package script '/home/robot134/robotws/src/install/operation/share/operation/package.bash'
+[2.032s] INFO:colcon.colcon_core.shell:Creating package script '/home/robot134/robotws/src/install/operation/share/operation/package.zsh'
+[2.033s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/robot134/robotws/src/install/operation/share/colcon-core/packages/operation)
+[2.357s] Level 1:colcon.colcon_core.shell:create_environment_hook('hebiros', 'pythonpath_develop')
+[2.359s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/robot134/robotws/src/build/hebiros/share/hebiros/hook/pythonpath_develop.ps1'
+[2.359s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/robot134/robotws/src/build/hebiros' returned '0': PYTHONPATH=/home/robot134/robotws/src/build/hebiros/prefix_override:/home/robot134/robotws/src/install/hebiros/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py develop --editable --build-directory /home/robot134/robotws/src/build/hebiros/build --no-deps install_data
+[2.360s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/robot134/robotws/src/build/hebiros/share/hebiros/hook/pythonpath_develop.dsv'
+[2.360s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/robot134/robotws/src/build/hebiros/share/hebiros/hook/pythonpath_develop.sh'
+[2.364s] Level 1:colcon.colcon_core.environment:checking '/home/robot134/robotws/src/install/hebiros' for CMake module files
+[2.365s] Level 1:colcon.colcon_core.environment:checking '/home/robot134/robotws/src/install/hebiros' for CMake config files
+[2.366s] Level 1:colcon.colcon_core.environment:checking '/home/robot134/robotws/src/install/hebiros/lib'
+[2.366s] Level 1:colcon.colcon_core.environment:checking '/home/robot134/robotws/src/install/hebiros/bin'
+[2.366s] Level 1:colcon.colcon_core.environment:checking '/home/robot134/robotws/src/install/hebiros/lib/pkgconfig/hebiros.pc'
+[2.367s] Level 1:colcon.colcon_core.environment:checking '/home/robot134/robotws/src/install/hebiros/lib/python3.10/site-packages'
+[2.367s] Level 1:colcon.colcon_core.shell:create_environment_hook('hebiros', 'pythonpath')
+[2.368s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/robot134/robotws/src/install/hebiros/share/hebiros/hook/pythonpath.ps1'
+[2.369s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/robot134/robotws/src/install/hebiros/share/hebiros/hook/pythonpath.dsv'
+[2.369s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/robot134/robotws/src/install/hebiros/share/hebiros/hook/pythonpath.sh'
+[2.370s] Level 1:colcon.colcon_core.environment:checking '/home/robot134/robotws/src/install/hebiros/bin'
+[2.370s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(hebiros)
+[2.372s] INFO:colcon.colcon_core.shell:Creating package script '/home/robot134/robotws/src/install/hebiros/share/hebiros/package.ps1'
+[2.373s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/robot134/robotws/src/install/hebiros/share/hebiros/package.dsv'
+[2.374s] INFO:colcon.colcon_core.shell:Creating package script '/home/robot134/robotws/src/install/hebiros/share/hebiros/package.sh'
+[2.375s] INFO:colcon.colcon_core.shell:Creating package script '/home/robot134/robotws/src/install/hebiros/share/hebiros/package.bash'
+[2.375s] INFO:colcon.colcon_core.shell:Creating package script '/home/robot134/robotws/src/install/hebiros/share/hebiros/package.zsh'
+[2.375s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/robot134/robotws/src/install/hebiros/share/colcon-core/packages/hebiros)
+[2.392s] Level 1:colcon.colcon_core.shell:create_environment_hook('basic134', 'pythonpath_develop')
+[2.393s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/robot134/robotws/src/build/basic134/share/basic134/hook/pythonpath_develop.ps1'
+[2.394s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/robot134/robotws/src/build/basic134' returned '0': PYTHONPATH=/home/robot134/robotws/src/build/basic134/prefix_override:/home/robot134/robotws/src/install/basic134/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py develop --editable --build-directory /home/robot134/robotws/src/build/basic134/build --no-deps install_data
+[2.394s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/robot134/robotws/src/build/basic134/share/basic134/hook/pythonpath_develop.dsv'
+[2.394s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/robot134/robotws/src/build/basic134/share/basic134/hook/pythonpath_develop.sh'
+[2.398s] Level 1:colcon.colcon_core.environment:checking '/home/robot134/robotws/src/install/basic134' for CMake module files
+[2.398s] Level 1:colcon.colcon_core.environment:checking '/home/robot134/robotws/src/install/basic134' for CMake config files
+[2.399s] Level 1:colcon.colcon_core.environment:checking '/home/robot134/robotws/src/install/basic134/lib'
+[2.399s] Level 1:colcon.colcon_core.environment:checking '/home/robot134/robotws/src/install/basic134/bin'
+[2.399s] Level 1:colcon.colcon_core.environment:checking '/home/robot134/robotws/src/install/basic134/lib/pkgconfig/basic134.pc'
+[2.399s] Level 1:colcon.colcon_core.environment:checking '/home/robot134/robotws/src/install/basic134/lib/python3.10/site-packages'
+[2.399s] Level 1:colcon.colcon_core.shell:create_environment_hook('basic134', 'pythonpath')
+[2.400s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/robot134/robotws/src/install/basic134/share/basic134/hook/pythonpath.ps1'
+[2.401s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/robot134/robotws/src/install/basic134/share/basic134/hook/pythonpath.dsv'
+[2.401s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/robot134/robotws/src/install/basic134/share/basic134/hook/pythonpath.sh'
+[2.402s] Level 1:colcon.colcon_core.environment:checking '/home/robot134/robotws/src/install/basic134/bin'
+[2.402s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(basic134)
+[2.404s] INFO:colcon.colcon_core.shell:Creating package script '/home/robot134/robotws/src/install/basic134/share/basic134/package.ps1'
+[2.405s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/robot134/robotws/src/install/basic134/share/basic134/package.dsv'
+[2.405s] INFO:colcon.colcon_core.shell:Creating package script '/home/robot134/robotws/src/install/basic134/share/basic134/package.sh'
+[2.406s] INFO:colcon.colcon_core.shell:Creating package script '/home/robot134/robotws/src/install/basic134/share/basic134/package.bash'
+[2.406s] INFO:colcon.colcon_core.shell:Creating package script '/home/robot134/robotws/src/install/basic134/share/basic134/package.zsh'
+[2.406s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/robot134/robotws/src/install/basic134/share/colcon-core/packages/basic134)
+[2.407s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:closing loop
+[2.407s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:loop closed
+[2.407s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:run_until_complete finished with '0'
+[2.407s] DEBUG:colcon.colcon_core.event_reactor:joining thread
+[2.414s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_notification.desktop_notification.terminal_notifier': Not used on non-Darwin systems
+[2.414s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_notification.desktop_notification.win32': Not used on non-Windows systems
+[2.415s] INFO:colcon.colcon_notification.desktop_notification:Sending desktop notification using 'notify2'
+[2.424s] DEBUG:colcon.colcon_core.event_reactor:joined thread
+[2.426s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/robot134/robotws/src/install/local_setup.ps1'
+[2.427s] INFO:colcon.colcon_core.shell:Creating prefix util module '/home/robot134/robotws/src/install/_local_setup_util_ps1.py'
+[2.430s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/robot134/robotws/src/install/setup.ps1'
+[2.431s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/robot134/robotws/src/install/local_setup.sh'
+[2.432s] INFO:colcon.colcon_core.shell:Creating prefix util module '/home/robot134/robotws/src/install/_local_setup_util_sh.py'
+[2.433s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/robot134/robotws/src/install/setup.sh'
+[2.434s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/robot134/robotws/src/install/local_setup.bash'
+[2.434s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/robot134/robotws/src/install/setup.bash'
+[2.436s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/robot134/robotws/src/install/local_setup.zsh'
+[2.436s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/robot134/robotws/src/install/setup.zsh'

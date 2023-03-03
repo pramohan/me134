@@ -14,9 +14,9 @@ from rclpy.qos              import QoSProfile, DurabilityPolicy
 from std_msgs.msg           import String
 from urdf_parser_py.urdf    import Robot
 
-from basic134.TransformHelpers import *
-from basic134.KinematicChain import *
-from basic134.splines import *
+from operation.TransformHelpers import *
+from operation.KinematicChain import *
+from operation.splines import *
 
 RATE = 100.0            # Hertz
 
@@ -31,13 +31,13 @@ if __name__ == "__main__":
     np.set_printoptions(precision=6, suppress=True)
 
     # Test...
-    R = Rotx(np.radians(45))
-    print("R:\n", R)
+    # R = Rotx(np.radians(45))
+    # print("R:\n", R)
 
-    quat = quat_from_R(R)
-    print("quat:\n", quat)
+    # quat = quat_from_R(R)
+    # print("quat:\n", quat)
 
-    print("R_from_quat():\n",  R_from_quat(quat))
+    # print("R_from_quat():\n",  R_from_quat(quat))
 
 #
 #   DEMO Node Class
@@ -69,14 +69,17 @@ class DemoNode(Node):
 
         # Create an object for the kinematic chain
         self.fnode = Node("fkin")
-        self.chain = KinematicChain(self.fnode, 'world', 'tip', ['base', 'shoulder', 'elbow'])
-        self.q_safe = np.array([0, -np.pi/2, np.pi/2])
+        self.chain = KinematicChain(self.fnode, 'world', 'tip', ['base', 'shoulder', 'elbow', 'wrist', 'finger'])
+        self.q_safe = np.array([0.0, 0.0, .0, 1.57, .0])
         
         # Grab movement segments for task
         self.segments_for_x()
         #self.segments_for_line()
         self.cseg = 0
-
+        # self.ignore = 1
+        # x_d1 = np.array([-0.4, -0., 0.2]) # the middle X on the table
+        # self.segments = [Goto(self.chain.fkin(self.position0.flatten()), x_d1, 4, 'Task'),
+        #                  Goto(x_d1, x_d1, 4, 'Task')]
         # Subscribe to the flip command
         #self.flipsub = self.create_subscription(Empty, '/flip', self.cb_flip, 1)
 
@@ -135,17 +138,23 @@ class DemoNode(Node):
         self.ignore = 1 # ignore spline from initial pos to home
         self.chain.setjoints(self.q_safe)
         x_0 = self.chain.ptip().flatten()
-        x_d1 = np.array([-0.26, -0.17, 0.02]) # the middle X on the table
-        x_d2 = np.array([-0.135, -0.48, 0.02]) # left X
-        x_d3 = np.array([-0.075, 0.105, 0.02]) # right X
+        x_d1 = np.array([-0.4, -0., 0.2]) # the middle X on the table
+        x_d2 = np.array([-0.30, 0.15, 0.2]) # left X
+        # x_d3 = np.array([-0.075, 0.105, 0.02]) # right X
+
+        # self.segments = [Goto(self.position0, self.q_safe, 3.0, 'Joint'),
+        #                  Goto(x_0, x_d1, 3.0, 'Task'),
+        #                  Goto(x_d1, x_0, 3.0, 'Task'),
+        #                  Goto(x_0, x_d2, 3.0, 'Task'),
+        #                  Goto(x_d2, x_0, 3.0, 'Task'),
+        #                  Goto(x_0, x_d3, 3.0, 'Task'),
+        #                  Goto(x_d3, x_0, 3.0, 'Task'),]
 
         self.segments = [Goto(self.position0, self.q_safe, 3.0, 'Joint'),
                          Goto(x_0, x_d1, 3.0, 'Task'),
                          Goto(x_d1, x_0, 3.0, 'Task'),
                          Goto(x_0, x_d2, 3.0, 'Task'),
-                         Goto(x_d2, x_0, 3.0, 'Task'),
-                         Goto(x_0, x_d3, 3.0, 'Task'),
-                         Goto(x_d3, x_0, 3.0, 'Task'),]
+                         Goto(x_d2, x_0, 3.0, 'Task')]
     
     def segments_for_line(self):
         # moves arm horizontally in front
@@ -153,8 +162,8 @@ class DemoNode(Node):
         self.chain.setjoints(self.position0)
         x_0 = self.chain.ptip().flatten()
 
-        x_SL1 = np.array([-0.3, -0.15, 0.1])
-        x_SL2 = np.array([-0.3, 0.15, 0.1])
+        x_SL1 = np.array([-0.3, -0.15, 0.15])
+        x_SL2 = np.array([-0.3, 0.15, 0.15])
         self.x_SL = [x_SL1, x_SL2]
 
         self.segments = [Goto(x_0, x_SL1, 4.0, 'Task'),
@@ -164,16 +173,44 @@ class DemoNode(Node):
         
     def ikin_NR(self, xd, q_guess):
         # performs the Newton-Raphson algorithm to find the ikin
-        q_guess = np.reshape(q_guess, (3,1))
-        for i in range(7):
+        xd = xd.reshape(5,1)
+        q_guess = np.reshape(q_guess.copy(), (5,1))
+        self.chain.setjoints(q_guess)
+
+        q_g0 = q_guess.copy()
+
+        for ctr in range(20):
             #J  = np.vstack((self.chain.Jv(),self.chain.Jw())) # shape (6,3)
+            x = np.vstack((self.chain.ptip(), 
+                           q_guess[1]-q_guess[2]+q_guess[3]-1.57, 
+                           q_guess[0]-q_guess[4]))
+            
             Jv = self.chain.Jv()
-            dx = (xd - self.chain.ptip().T).T # shape (3,1)
-            q_guess += (np.linalg.pinv(Jv) @ dx)
+            J = np.vstack((Jv, np.array([[0.,1.,-1.,1.,0.],[1.,0.,0.,0.,-1.]])))
+
+            e = xd - x # shape (3,1)
+            q_guess += (np.linalg.pinv(J) @ e)
             self.chain.setjoints(q_guess)
+            #print(np.linalg.norm(e))
+            if np.linalg.norm(e) < 10**-6:
+                break
+            if ctr > 2: 
+                self.get_logger().warn("Warning: IKIN did not converge")
+
         return np.array(q_guess).flatten()
 
-    # Shutdown
+    def gravity(self, pos):
+        # calculates effort required to hold position
+        # i.e., counters gravity
+        self.coeffs = [0,0,0,-1.2]
+        t1 = pos[1]
+        t2 = pos[2]
+        tau1 =  self.coeffs[0]*np.sin(t1+t2) +\
+                self.coeffs[1]*np.cos(t1+t2) +\
+                self.coeffs[2]*np.sin(t1) +\
+                self.coeffs[3]*np.cos(t1)
+        tau2 = self.coeffs[0]*np.sin(t1+t2) + self.coeffs[1]*np.cos(t1 + t2)
+        return np.array([0.0, tau1, -tau2])
     def shutdown(self):
         # No particular cleanup, just shut down the node.
         self.fnode.destroy_node()
@@ -223,9 +260,11 @@ class DemoNode(Node):
             # Get the position and velocity of the task spline
             (position, velocity) = self.segments[self.cseg].evaluate(t-self.t0)
             
+            x = np.vstack((position.reshape(-1,1), np.array([[0.01],[0.01]])))
             # Find the angle to move to and assign it to guess, since it will be
             # used as the guess for the next angle
-            position = self.ikin_NR(position, np.reshape(cpos,(3,1)))
+            #print('prev ', self.prev_pos)
+            position = self.ikin_NR(x, np.reshape(self.prev_pos,(5,1)))
             #print(position.shape)
             # print(self.ikin_NR(position, self.grabpos))
             # Get the translation and jacobian for the new angle (stored in guess)
@@ -246,7 +285,7 @@ class DemoNode(Node):
     def gravity(self, pos):
         # calculates effort required to hold position
         # i.e., counters gravity
-        self.coeffs = [0,0,0,-1.2]
+        self.coeffs = [0,3,-0.2,0]
         t1 = pos[1]
         t2 = pos[2]
         tau1 =  self.coeffs[0]*np.sin(t1+t2) +\
@@ -283,20 +322,29 @@ class DemoNode(Node):
         #print(self.gravity(self.actpos))
         #print("")
 
+        # print forward kinematics position
+        # fkin = self.chain.fkin(self.grabpos)
+        # print(np.squeeze(fkin[0]))
+
         # if there's contact detected, the arm flips
         #self.check_contact(self.grabpos, t)
 
-        sendEff = self.gravity(self.grabpos)
+        sendEff = self.gravity(self.grabpos).tolist()
+        sendEff.extend([0.0,0.0])
+
+        #print(sendPos)
+        self.get_logger().info(str(self.grabpos))
+
 
         self.cmdmsg.header.stamp = self.get_clock().now().to_msg()
-        self.cmdmsg.name         = ['base', 'shoulder','elbow', 'wrist']
-        self.cmdmsg.position     = sendPos.tolist()
-        #self.cmdmsg.position     = [float("nan"), float("nan"), float("nan")]
-        #self.cmdmsg.velocity     = []
-        self.cmdmsg.velocity     = [float("nan"), float("nan"), float("nan")]
-        #self.cmdmsg.effort       = []
-        self.cmdmsg.effort       = sendEff.tolist()
-        self.cmdpub.publish(self.cmdmsg)
+        self.cmdmsg.name         = ['base', 'shoulder','elbow', 'wrist', 'finger']
+        # self.cmdmsg.position     = [0.0, 0.0, 0.0, 0.0, 0.0] # [float("nan"), float("nan"), float("nan"), float("nan"), float("nan")]
+        self.cmdmsg.position     =  sendPos.tolist()
+        self.cmdmsg.velocity     = []
+        #self.cmdmsg.velocity     = [float("nan"), float("nan"), float("nan")]
+        self.cmdmsg.effort       = [] #sendEff#.tolist().extend([0,0])
+        #self.cmdmsg.effort       = sendEff.tolist()
+        #self.cmdpub.publish(self.cmdmsg)
 
 
 

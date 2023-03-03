@@ -289,13 +289,13 @@ class DemoNode(Node):
         sendEff = self.gravity(self.grabpos)
 
         self.cmdmsg.header.stamp = self.get_clock().now().to_msg()
-        self.cmdmsg.name         = ['base', 'shoulder','elbow']
-        self.cmdmsg.position     = sendPos.tolist()
+        self.cmdmsg.name         = ['base', 'shoulder','elbow', 'wrist']
+        self.cmdmsg.position     = []#sendPos.tolist()
         #self.cmdmsg.position     = [float("nan"), float("nan"), float("nan")]
-        #self.cmdmsg.velocity     = []
-        self.cmdmsg.velocity     = [float("nan"), float("nan"), float("nan")]
-        #self.cmdmsg.effort       = []
-        self.cmdmsg.effort       = sendEff.tolist()
+        self.cmdmsg.velocity     = []
+        #self.cmdmsg.velocity     = [float("nan"), float("nan"), float("nan")]
+        self.cmdmsg.effort       = []
+        #self.cmdmsg.effort       = sendEff.tolist()
         self.cmdpub.publish(self.cmdmsg)
 
 

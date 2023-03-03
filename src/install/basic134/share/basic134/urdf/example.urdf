@@ -51,7 +51,7 @@
   <joint name="upperarm" type="fixed">
     <parent link="upperarm"/>
     <child  link="elbowmotor"/>
-    <origin xyz="-0.3 0 0" rpy="0 3.1415 0"/>
+    <origin xyz="0 0.3 0" rpy="0 3.1415 -1.5708"/>
   </joint>
 
   <!-- Elbow motor.  Thickness: X5 = 31.1mm, X8 = 45.1mm -->
@@ -65,8 +65,38 @@
   <!-- Shift across the upper arm (1/4in thickness) -->
   <joint name="lowerarm" type="fixed">
     <parent link="lowerarm"/>
+    <child  link="wristmotor"/>
+    <origin xyz="0 0.30095 0" rpy="0 3.1415 1.5708"/>
+  </joint>
+
+  <!-- Wrist motor.  Thickness: X5 = 31.1mm, X8 = 45.1mm -->
+  <joint name="wrist" type="continuous">
+    <parent link="wristmotor"/>
+    <child  link="hand"/>
+    <origin xyz="0 0 .0311" rpy="0 0 0"/>
+    <axis   xyz="0 0 1"/>
+  </joint>
+
+  <!-- Shift across the hand (1/4in thickness) -->
+  <joint name="hand" type="fixed">
+    <parent link="hand"/>
+    <child  link="lbracket2"/>
+    <origin xyz="0 0.15266 0" rpy="0 0 0"/>
+  </joint>
+
+  <!-- Shift across the second L bracket -->
+  <joint name="lbracket2" type="fixed">
+    <parent link="lbracket2"/>
+    <child  link="fingermotor"/>
+    <origin xyz=".045 0 -0.0525" rpy="-1.5708 0 -1.5708"/>
+  </joint>
+
+  <!-- Finger motor.  Thickness: X5 = 31.1mm, X8 = 45.1mm -->
+  <joint name="finger" type="continuous">
+    <parent link="fingermotor"/>
     <child  link="tip"/>
-    <origin xyz="0.315 0 0.003175" rpy="0 0 0"/>
+    <origin xyz="0 0 .0311" rpy="0 0 0"/>
+    <axis   xyz="0 0 1"/>
   </joint>
   
   <!-- *************************************************** -->
@@ -125,7 +155,7 @@
 
   <link name="upperarm">
     <visual>
-      <origin xyz = "-0.15 0 0" rpy = "0 -1.5708 0"/>
+      <origin xyz = "0 0.15 0.0065" rpy = "0 1.5708 1.5708"/>
       <geometry>
         <mesh filename="package://basic134/meshes/arm_base.stl"
         scale="0.001 0.001 0.001"/>
@@ -146,13 +176,57 @@
 
   <link name="lowerarm">
     <visual>
+      <origin xyz = "0.03 0.337 0.01" rpy = "3.1415 0 -1.5708"/>
       <geometry>
-        <mesh filename="package://basic134/meshes/lowerarm.stl"/>
+        <mesh filename="package://basic134/meshes/link.STL"
+        scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="wood"/>
     </visual>
   </link>
 
+  <link name="wristmotor">
+    <visual>
+      <geometry>
+        <mesh filename="package://basic134/meshes/X5.stl"
+	      scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="hebi"/>
+    </visual>
+  </link>
+
+  <link name="hand">
+    <visual>
+      <origin xyz = "0.03 -0.0247 0" rpy = "0 0 1.5708"/>
+      <geometry>
+        <mesh filename="package://basic134/meshes/link_short.STL"
+        scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="wood"/>
+    </visual>
+  </link>
+
+  <link name="lbracket2">
+    <visual>
+      <origin xyz = "0.045 0.0503 0" rpy = "-1.5708 0 3.1415"/>
+      <geometry>
+        <mesh filename="package://operation/meshes/lbracket2.STL"
+        scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="wood"/>
+    </visual>
+  </link>
+
+  <link name="fingermotor">
+    <visual>
+      <geometry>
+        <mesh filename="package://basic134/meshes/X5.stl"
+	      scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="hebi"/>
+    </visual>
+  </link>
+  
   <link name="tip"/>
 
 </robot>

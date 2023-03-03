@@ -1,7 +1,7 @@
 from setuptools import setup
 from glob import glob
 
-package_name = 'basic134'
+package_name = 'operation'
 
 setup(
     name=package_name,
@@ -25,7 +25,7 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'demo134 = basic134.demo134:main',
+            'demo134 = operation.demo134:main',
         ],
     },
 )

@@ -1,0 +1,52 @@
+[1.189s] Invoking command in '/home/robot134/robotws/src/build/operation': PYTHONPATH=/home/robot134/robotws/src/build/operation/prefix_override:/home/robot134/robotws/src/install/operation/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py develop --editable --build-directory /home/robot134/robotws/src/build/operation/build --no-deps install_data
+[1.446s] running develop
+[1.448s] /usr/lib/python3/dist-packages/setuptools/command/easy_install.py:158: EasyInstallDeprecationWarning: easy_install command is deprecated. Use build and pip and other standards-based tools.
+[1.449s]   warnings.warn(
+[1.450s] /usr/lib/python3/dist-packages/setuptools/command/install.py:34: SetuptoolsDeprecationWarning: setup.py install is deprecated. Use build and pip and other standards-based tools.
+[1.450s]   warnings.warn(
+[1.506s] /usr/lib/python3/dist-packages/pkg_resources/__init__.py:116: PkgResourcesDeprecationWarning: 1.16.0-unknown is an invalid version and will not be supported in a future release
+[1.506s]   warnings.warn(
+[1.507s] /usr/lib/python3/dist-packages/pkg_resources/__init__.py:116: PkgResourcesDeprecationWarning: 1.1build1 is an invalid version and will not be supported in a future release
+[1.507s]   warnings.warn(
+[1.507s] /usr/lib/python3/dist-packages/pkg_resources/__init__.py:116: PkgResourcesDeprecationWarning: 0.1.43ubuntu1 is an invalid version and will not be supported in a future release
+[1.507s]   warnings.warn(
+[1.616s] running egg_info
+[1.616s] creating operation.egg-info
+[1.616s] writing operation.egg-info/PKG-INFO
+[1.617s] writing dependency_links to operation.egg-info/dependency_links.txt
+[1.617s] writing entry points to operation.egg-info/entry_points.txt
+[1.617s] writing requirements to operation.egg-info/requires.txt
+[1.617s] writing top-level names to operation.egg-info/top_level.txt
+[1.617s] writing manifest file 'operation.egg-info/SOURCES.txt'
+[1.619s] reading manifest file 'operation.egg-info/SOURCES.txt'
+[1.620s] writing manifest file 'operation.egg-info/SOURCES.txt'
+[1.621s] running build_ext
+[1.622s] Creating /home/robot134/robotws/src/install/operation/lib/python3.10/site-packages/operation.egg-link (link to .)
+[1.623s] Installing demo134 script to /home/robot134/robotws/src/install/operation/lib/operation
+[1.623s] 
+[1.623s] Installed /home/robot134/robotws/src/build/operation
+[1.623s] running install_data
+[1.623s] creating /home/robot134/robotws/src/install/operation/share/ament_index
+[1.623s] creating /home/robot134/robotws/src/install/operation/share/ament_index/resource_index
+[1.624s] creating /home/robot134/robotws/src/install/operation/share/ament_index/resource_index/packages
+[1.624s] copying resource/operation -> /home/robot134/robotws/src/install/operation/share/ament_index/resource_index/packages
+[1.624s] copying package.xml -> /home/robot134/robotws/src/install/operation/share/operation
+[1.624s] creating /home/robot134/robotws/src/install/operation/share/operation/launch
+[1.624s] copying launch/runexample.launch.py -> /home/robot134/robotws/src/install/operation/share/operation/launch
+[1.624s] copying launch/viewexample.launch.py -> /home/robot134/robotws/src/install/operation/share/operation/launch
+[1.625s] creating /home/robot134/robotws/src/install/operation/share/operation/rviz
+[1.625s] copying rviz/viewurdf.rviz -> /home/robot134/robotws/src/install/operation/share/operation/rviz
+[1.625s] creating /home/robot134/robotws/src/install/operation/share/operation/meshes
+[1.625s] copying meshes/link.STL -> /home/robot134/robotws/src/install/operation/share/operation/meshes
+[1.626s] copying meshes/link_short.STL -> /home/robot134/robotws/src/install/operation/share/operation/meshes
+[1.627s] copying meshes/lbracket.STL -> /home/robot134/robotws/src/install/operation/share/operation/meshes
+[1.627s] copying meshes/X8.stl -> /home/robot134/robotws/src/install/operation/share/operation/meshes
+[1.629s] copying meshes/arm_base.stl -> /home/robot134/robotws/src/install/operation/share/operation/meshes
+[1.630s] copying meshes/lbracket2.STL -> /home/robot134/robotws/src/install/operation/share/operation/meshes
+[1.630s] copying meshes/basiclink.stl -> /home/robot134/robotws/src/install/operation/share/operation/meshes
+[1.631s] copying meshes/basiclink.dae -> /home/robot134/robotws/src/install/operation/share/operation/meshes
+[1.631s] copying meshes/X5.stl -> /home/robot134/robotws/src/install/operation/share/operation/meshes
+[1.633s] copying meshes/lowerarm.stl -> /home/robot134/robotws/src/install/operation/share/operation/meshes
+[1.633s] creating /home/robot134/robotws/src/install/operation/share/operation/urdf
+[1.633s] copying urdf/example.urdf -> /home/robot134/robotws/src/install/operation/share/operation/urdf
+[1.662s] Invoked command in '/home/robot134/robotws/src/build/operation' returned '0': PYTHONPATH=/home/robot134/robotws/src/build/operation/prefix_override:/home/robot134/robotws/src/install/operation/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py develop --editable --build-directory /home/robot134/robotws/src/build/operation/build --no-deps install_data

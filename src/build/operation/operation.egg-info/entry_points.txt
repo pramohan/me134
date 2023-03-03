@@ -1,0 +1,3 @@
+[console_scripts]
+demo134 = operation.demo134:main
+
