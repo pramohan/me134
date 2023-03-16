@@ -1,0 +1,7 @@
+[console_scripts]
+balldetector = detectors.balldetector:main
+depthincenter = detectors.depthincenter:main
+detectaruco = detectors.detectaruco:main
+facedetector = detectors.facedetector:main
+writearuco = detectors.writearuco:main
+

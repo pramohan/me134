@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<robot name="example">
+<robot name="KillerRover2000">
   
   <!-- *************************************************** -->
   <!-- ***************** Kinematic Chain ***************** -->
@@ -20,83 +20,90 @@
   <!-- Shift across the base plate to the base motor. -->
   <joint name="baseplate" type="fixed">
     <parent link="baseplate"/>
-    <child  link="basemotor"/>
-    <origin xyz="0.08 0 0.012" rpy="0 0 0"/>
+    <child  link="motor0"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
   </joint>
 
-  <!-- Base motor.  Thickness: X5 = 31.1mm, X8 = 45.1mm -->
-  <joint name="base" type="continuous">
-    <parent link="basemotor"/>
-    <child  link="lbracket"/>
-    <origin xyz="0 0 0.0311" rpy="0 0 0"/>
+  <!-- Motor0 -->
+  <joint name="theta0" type="continuous">
+    <parent link="motor0"/>
+    <child  link="basecylinder"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
     <axis   xyz="0 0 1"/>
   </joint>
 
-  <!-- Shift across the L bracket -->
-  <joint name="lbracket" type="fixed">
-    <parent link="lbracket"/>
-    <child  link="shouldermotor"/>
-    <origin xyz="0 -0.035 0.075" rpy="1.5708 0 3.1415"/>
+  <!-- Base cylinder link -->
+  <joint name="basecylinder" type="fixed">
+    <parent link="basecylinder"/>
+    <child  link="motor1link"/>
+    <origin xyz="0 0 0.0127" rpy="0 0 0"/>
   </joint>
 
-  <!-- Shoulder motor.  Thickness: X5 = 31.1mm, X8 = 45.1mm -->
-  <joint name="shoulder" type="continuous">
-    <parent link="shouldermotor"/>
-    <child  link="upperarm"/>
-    <origin xyz="0 0 0.0451" rpy="0 0 0"/>
+  <!-- Link to motor1 -->
+  <joint name="motor1link" type="fixed">
+    <parent link="motor1link"/>
+    <child  link="motor1"/>
+    <origin xyz="0.0225 0.017 0.0902" rpy="0 0 0"/>
+  </joint>
+
+  <!-- Motor1 -->
+  <joint name="theta1" type="continuous">
+    <parent link="motor1"/>
+    <child  link="motor2link"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <axis   xyz="1 0 0"/>
+  </joint>
+
+  <!-- Link to motor2 -->
+  <joint name="motor2link" type="fixed">
+    <parent link="motor2link"/>
+    <child  link="motor2"/>
+    <origin xyz="0.0574 0.396 0.0" rpy="0 0 0"/>
+  </joint>
+
+  <!-- Motor2 -->
+  <joint name="theta2" type="continuous">
+    <parent link="motor2"/>
+    <child  link="motor3link"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <axis   xyz="1 0 0"/>
+  </joint>
+
+  <!-- Link to motor3 -->
+  <joint name="motor3link" type="fixed">
+    <parent link="motor3link"/>
+    <child  link="motor3"/>
+    <origin xyz="-0.0574 0.396 0.0" rpy="0 0 0"/>
+  </joint>
+
+  <!-- Motor3 -->
+  <joint name="theta3" type="continuous">
+    <parent link="motor3"/>
+    <child  link="motor4link"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <axis   xyz="1 0 0"/>
+  </joint>
+
+  <!-- Link to motor4 -->
+  <joint name="motor4link" type="fixed">
+    <parent link="motor4link"/>
+    <child  link="motor4"/>
+    <origin xyz="0 0.1535 0.0574" rpy="0 0 0"/>
+  </joint>
+
+  <!-- Motor4 -->
+  <joint name="theta4" type="continuous">
+    <parent link="motor4"/>
+    <child  link="tiplink"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
     <axis   xyz="0 0 1"/>
   </joint>
 
-  <!-- Shift across the upper arm (1/4in thickness) -->
-  <joint name="upperarm" type="fixed">
-    <parent link="upperarm"/>
-    <child  link="elbowmotor"/>
-    <origin xyz="0 0.3 0" rpy="0 3.1415 -1.5708"/>
-  </joint>
-
-  <!-- Elbow motor.  Thickness: X5 = 31.1mm, X8 = 45.1mm -->
-  <joint name="elbow" type="continuous">
-    <parent link="elbowmotor"/>
-    <child  link="lowerarm"/>
-    <origin xyz="0 0 .0311" rpy="0 0 0"/>
-    <axis   xyz="0 0 1"/>
-  </joint>
-
-  <!-- Shift across the upper arm (1/4in thickness) -->
-  <joint name="lowerarm" type="fixed">
-    <parent link="lowerarm"/>
-    <child  link="wristmotor"/>
-    <origin xyz="0 0.30095 0" rpy="0 3.1415 -1.5708"/>
-  </joint>
-
-  <!-- Wrist motor.  Thickness: X5 = 31.1mm, X8 = 45.1mm -->
-  <joint name="wrist" type="continuous">
-    <parent link="wristmotor"/>
-    <child  link="hand"/>
-    <origin xyz="0 0 .0311" rpy="0 0 0"/>
-    <axis   xyz="0 0 1"/>
-  </joint>
-
-  <!-- Shift across the hand (1/4in thickness) -->
-    <joint name="hand" type="fixed">
-      <parent link="hand"/>
-      <child  link="lbracket2"/>
-      <origin xyz="0 0.15266 0" rpy="0 0 0"/>
-    </joint>
-
-  <!-- Shift across the second L bracket -->
-  <joint name="lbracket2" type="fixed">
-    <parent link="lbracket2"/>
-    <child  link="fingermotor"/>
-    <origin xyz=".045 0 -0.0525" rpy="-1.5708 0 -1.5708"/>
-  </joint>
-
-  <!-- Finger motor.  Thickness: X5 = 31.1mm, X8 = 45.1mm -->
-  <joint name="finger" type="continuous">
-    <parent link="fingermotor"/>
+  <!-- Link to tip -->
+  <joint name="tiplink" type="fixed">
+    <parent link="tiplink"/>
     <child  link="tip"/>
-    <origin xyz="0 0 .0311" rpy="0 0 0"/>
-    <axis   xyz="0 0 1"/>
+    <origin xyz="0 0.1275 0" rpy="0 0 0"/>
   </joint>
   
   <!-- *************************************************** -->
@@ -114,116 +121,121 @@
 
   <link name="baseplate">
     <visual>
-      <origin xyz = "0.07 0 0" rpy = "0 0 0"/>
+      <origin xyz = "0 0 -0.025" rpy = "0 0 0"/>
       <geometry>
-        <cylinder length="0.012" radius="0.08"/>
+        <box size="0.1778 0.1778 0.05"/>
       </geometry>
       <material name="wood"/>
     </visual>
   </link>
 
-  <link name="basemotor">
+  <link name="motor0">
     <visual>
+      <origin xyz = "0 0 0" rpy = "0 0 0"/>
       <geometry>
-        <mesh filename="package://operation/meshes/X5.stl"
-	      scale="0.001 0.001 0.001"/>
+        <sphere radius="0.000001"/>
       </geometry>
       <material name="hebi"/>
     </visual>
   </link>
 
-  <link name="lbracket">
+  <link name="basecylinder">
     <visual>
-      <origin xyz = "0.038 0.03 0" rpy = "0 0 3.1415"/>
+      <origin xyz = "0 0 0.00635" rpy = "0 0 0"/>
       <geometry>
-        <mesh filename="package://operation/meshes/lbracket.STL"
-        scale="0.001 0.001 0.001"/>
-      </geometry>
-      <material name="wood"/>
-    </visual>
-  </link>
-
-  <link name="shouldermotor">
-    <visual>
-      <geometry>
-        <mesh filename="package://operation/meshes/X8.stl"
-	      scale="0.001 0.001 0.001"/>
+        <cylinder length="0.0127" radius="0.2286"/>
       </geometry>
       <material name="hebi"/>
     </visual>
   </link>
 
-  <link name="upperarm">
+  <link name="motor1link">
     <visual>
-      <origin xyz = "0 0.15 0.0065" rpy = "0 1.5708 1.5708"/>
+      <origin xyz = "0.0225 0.017 0.0451" rpy = "0 0 0"/>
       <geometry>
-        <mesh filename="package://operation/meshes/arm_base.stl"
-        scale="0.001 0.001 0.001"/>
+        <cylinder length="0.0902" radius="0.0254"/>
       </geometry>
       <material name="wood"/>
     </visual>
   </link>
 
-  <link name="elbowmotor">
+  <link name="motor1">
     <visual>
+      <origin xyz = "0 0 0" rpy = "0 0 0"/>
       <geometry>
-        <mesh filename="package://operation/meshes/X5.stl"
-	      scale="0.001 0.001 0.001"/>
+        <sphere radius="0.025"/>
       </geometry>
       <material name="hebi"/>
     </visual>
   </link>
 
-  <link name="lowerarm">
+  <link name="motor2link">
     <visual>
-      <origin xyz = "0.065 0.332 0.0061" rpy = "3.1415 0 -1.5708"/>
+      <origin xyz = "0 0.198 0" rpy = "1.5708 0 0"/>
       <geometry>
-        <mesh filename="package://operation/meshes/link.STL"
-        scale="0.001 0.001 0.001"/>
+        <cylinder length="0.396" radius="0.016"/>
       </geometry>
       <material name="wood"/>
     </visual>
   </link>
 
-  <link name="wristmotor">
+  <link name="motor2">
     <visual>
+      <origin xyz = "-0.025 0 0" rpy = "0 1.5708 0"/>
       <geometry>
-        <mesh filename="package://operation/meshes/X5.stl"
-	      scale="0.001 0.001 0.001"/>
+        <cylinder length="0.1" radius="0.02"/>
       </geometry>
       <material name="hebi"/>
     </visual>
   </link>
 
-  <link name="hand">
+  <link name="motor3link">
     <visual>
-      <origin xyz = "0.0145 -0.035 0" rpy = "0 0 1.0472"/>
+      <origin xyz = "0 0.198 0" rpy = "1.5708 0 0"/>
       <geometry>
-        <mesh filename="package://operation/meshes/link_short.STL"
-        scale="0.001 0.001 0.001"/>
+        <cylinder length="0.396" radius="0.016"/>
       </geometry>
       <material name="wood"/>
     </visual>
   </link>
 
-  <link name="lbracket2">
+  <link name="motor3">
     <visual>
-      <origin xyz = "0.045 0.0503 0" rpy = "-1.5708 0 3.1415"/>
+      <origin xyz = "0.025 0 0" rpy = "0 1.5708 0"/>
       <geometry>
-        <mesh filename="package://operation/meshes/lbracket2.STL"
-        scale="0.001 0.001 0.001"/>
-      </geometry>
-      <material name="wood"/>
-    </visual>
-  </link>
-
-  <link name="fingermotor">
-    <visual>
-      <geometry>
-        <mesh filename="package://basic134/meshes/X5.stl"
-	      scale="0.001 0.001 0.001"/>
+        <cylinder length="0.1" radius="0.02"/>
       </geometry>
       <material name="hebi"/>
+    </visual>
+  </link>
+
+  <link name="motor4link">
+    <visual>
+      <origin xyz = "0 0.07675 0" rpy = "1.5708 0 0"/>
+      <geometry>
+        <cylinder length="0.1535" radius="0.016"/>
+      </geometry>
+      <material name="wood"/>
+    </visual>
+  </link>
+
+  <link name="motor4">
+    <visual>
+      <origin xyz = "0 0 -0.03" rpy = "0 0 0"/>
+      <geometry>
+        <cylinder length="0.1" radius="0.02"/>
+      </geometry>
+      <material name="hebi"/>
+    </visual>
+  </link>
+  
+  <link name="tiplink">
+    <visual>
+      <origin xyz = "0 0.06375 0" rpy = "1.5708 0 0"/>
+      <geometry>
+        <cylinder length="0.1275" radius="0.016"/>
+      </geometry>
+      <material name="wood"/>
     </visual>
   </link>
 

@@ -1,0 +1,16 @@
+running develop
+running egg_info
+writing operation.egg-info/PKG-INFO
+writing dependency_links to operation.egg-info/dependency_links.txt
+writing entry points to operation.egg-info/entry_points.txt
+writing requirements to operation.egg-info/requires.txt
+writing top-level names to operation.egg-info/top_level.txt
+reading manifest file 'operation.egg-info/SOURCES.txt'
+writing manifest file 'operation.egg-info/SOURCES.txt'
+running build_ext
+Creating /home/robot134/robotws/src/install/operation/lib/python3.10/site-packages/operation.egg-link (link to .)
+Installing demo134 script to /home/robot134/robotws/src/install/operation/lib/operation
+
+Installed /home/robot134/robotws/src/build/operation
+running install_data
+copying urdf/example.urdf -> /home/robot134/robotws/src/install/operation/share/operation/urdf

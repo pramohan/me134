@@ -16,6 +16,7 @@ meshes/lowerarm.stl
 operation/KinematicChain.py
 operation/TransformHelpers.py
 operation/__init__.py
+operation/arucodetector.py
 operation/demo134.py
 operation/movedemo.py
 operation/operation.py

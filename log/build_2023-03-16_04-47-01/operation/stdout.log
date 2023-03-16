@@ -1,0 +1,42 @@
+running develop
+running egg_info
+creating operation.egg-info
+writing operation.egg-info/PKG-INFO
+writing dependency_links to operation.egg-info/dependency_links.txt
+writing entry points to operation.egg-info/entry_points.txt
+writing requirements to operation.egg-info/requires.txt
+writing top-level names to operation.egg-info/top_level.txt
+writing manifest file 'operation.egg-info/SOURCES.txt'
+reading manifest file 'operation.egg-info/SOURCES.txt'
+writing manifest file 'operation.egg-info/SOURCES.txt'
+running build_ext
+Creating /home/robot134/robotws/install/operation/lib/python3.10/site-packages/operation.egg-link (link to .)
+Installing arucodetector script to /home/robot134/robotws/install/operation/lib/operation
+Installing demo134 script to /home/robot134/robotws/install/operation/lib/operation
+Installing republish_ctrl script to /home/robot134/robotws/install/operation/lib/operation
+
+Installed /home/robot134/robotws/build/operation
+running install_data
+creating /home/robot134/robotws/install/operation/share/ament_index
+creating /home/robot134/robotws/install/operation/share/ament_index/resource_index
+creating /home/robot134/robotws/install/operation/share/ament_index/resource_index/packages
+copying resource/operation -> /home/robot134/robotws/install/operation/share/ament_index/resource_index/packages
+copying package.xml -> /home/robot134/robotws/install/operation/share/operation
+creating /home/robot134/robotws/install/operation/share/operation/launch
+copying launch/runexample.launch.py -> /home/robot134/robotws/install/operation/share/operation/launch
+copying launch/viewexample.launch.py -> /home/robot134/robotws/install/operation/share/operation/launch
+creating /home/robot134/robotws/install/operation/share/operation/rviz
+copying rviz/viewurdf.rviz -> /home/robot134/robotws/install/operation/share/operation/rviz
+creating /home/robot134/robotws/install/operation/share/operation/meshes
+copying meshes/link.STL -> /home/robot134/robotws/install/operation/share/operation/meshes
+copying meshes/link_short.STL -> /home/robot134/robotws/install/operation/share/operation/meshes
+copying meshes/lbracket.STL -> /home/robot134/robotws/install/operation/share/operation/meshes
+copying meshes/X8.stl -> /home/robot134/robotws/install/operation/share/operation/meshes
+copying meshes/arm_base.stl -> /home/robot134/robotws/install/operation/share/operation/meshes
+copying meshes/lbracket2.STL -> /home/robot134/robotws/install/operation/share/operation/meshes
+copying meshes/basiclink.stl -> /home/robot134/robotws/install/operation/share/operation/meshes
+copying meshes/basiclink.dae -> /home/robot134/robotws/install/operation/share/operation/meshes
+copying meshes/X5.stl -> /home/robot134/robotws/install/operation/share/operation/meshes
+copying meshes/lowerarm.stl -> /home/robot134/robotws/install/operation/share/operation/meshes
+creating /home/robot134/robotws/install/operation/share/operation/urdf
+copying urdf/example.urdf -> /home/robot134/robotws/install/operation/share/operation/urdf

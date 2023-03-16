@@ -26,6 +26,9 @@ setup(
     entry_points={
         'console_scripts': [
             'demo134 = operation.demo134:main',
+            'arucodetector = operation.arucodetector:main',
+            'republish_ctrl = operation.republish_ctrl:main',
         ],
     },
 )
+

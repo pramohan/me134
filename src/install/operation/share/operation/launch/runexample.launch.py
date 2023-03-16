@@ -76,6 +76,20 @@ def generate_launch_description():
                       {'joints': ['base', 'shoulder', 'elbow', 'wrist', 'finger']}],
         on_exit    = Shutdown())
 
+    # Configure a node for the usb camera
+    node_usbcam = Node(
+        name       = 'usb_cam', 
+        package    = 'usb_cam',
+        executable = 'usb_cam_node_exe',
+        namespace  = 'usb_cam',
+        output     = 'screen',
+        parameters = [{'video_device': '/dev/video0'},
+                      {'framerate':    30.0},
+                      {'pixel_format': 'yuyv'},
+                      {'image_width':  640},
+                      {'image_height': 480},
+                      {'camera_name':  'logitech'}])
+
     # Configure a node for the simple demo.
     node_demo = Node(
         name       = 'demo', 
@@ -83,6 +97,11 @@ def generate_launch_description():
         executable = 'demo134',
         output     = 'screen')
 
+    detector_demo = Node(
+        name       = 'detector', 
+        package    = 'operation',
+        executable = 'arucodetector',
+        output     = 'screen')
 
     ######################################################################
     # COMBINE THE ELEMENTS INTO ONE LIST
@@ -94,5 +113,7 @@ def generate_launch_description():
         node_robot_state_publisher_ACTUAL,
         node_rviz,
         node_hebi,
+        node_usbcam,
         node_demo,
+        #detector_demo,
     ])

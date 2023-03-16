@@ -1,0 +1,5 @@
+[console_scripts]
+arucodetector = operation.arucodetector:main
+demo134 = operation.demo134:main
+republish_ctrl = operation.republish_ctrl:main
+

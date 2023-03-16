@@ -1,0 +1,29 @@
+[1.327s] Invoking command in '/home/robot134/robotws/src/build/hebiros': PYTHONPATH=/home/robot134/robotws/src/build/hebiros/prefix_override:/home/robot134/robotws/src/install/hebiros/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py develop --editable --build-directory /home/robot134/robotws/src/build/hebiros/build --no-deps install_data
+[1.747s] running develop
+[1.747s] /usr/lib/python3/dist-packages/setuptools/command/easy_install.py:158: EasyInstallDeprecationWarning: easy_install command is deprecated. Use build and pip and other standards-based tools.
+[1.747s]   warnings.warn(
+[1.749s] /usr/lib/python3/dist-packages/setuptools/command/install.py:34: SetuptoolsDeprecationWarning: setup.py install is deprecated. Use build and pip and other standards-based tools.
+[1.749s]   warnings.warn(
+[1.848s] /usr/lib/python3/dist-packages/pkg_resources/__init__.py:116: PkgResourcesDeprecationWarning: 1.16.0-unknown is an invalid version and will not be supported in a future release
+[1.848s]   warnings.warn(
+[1.849s] /usr/lib/python3/dist-packages/pkg_resources/__init__.py:116: PkgResourcesDeprecationWarning: 1.1build1 is an invalid version and will not be supported in a future release
+[1.849s]   warnings.warn(
+[1.849s] /usr/lib/python3/dist-packages/pkg_resources/__init__.py:116: PkgResourcesDeprecationWarning: 0.1.43ubuntu1 is an invalid version and will not be supported in a future release
+[1.849s]   warnings.warn(
+[2.031s] running egg_info
+[2.031s] writing hebiros.egg-info/PKG-INFO
+[2.032s] writing dependency_links to hebiros.egg-info/dependency_links.txt
+[2.032s] writing entry points to hebiros.egg-info/entry_points.txt
+[2.032s] writing requirements to hebiros.egg-info/requires.txt
+[2.032s] writing top-level names to hebiros.egg-info/top_level.txt
+[2.035s] reading manifest file 'hebiros.egg-info/SOURCES.txt'
+[2.036s] writing manifest file 'hebiros.egg-info/SOURCES.txt'
+[2.038s] running build_ext
+[2.038s] Creating /home/robot134/robotws/src/install/hebiros/lib/python3.10/site-packages/hebiros.egg-link (link to .)
+[2.039s] Installing hebinode script to /home/robot134/robotws/src/install/hebiros/lib/hebiros
+[2.039s] Installing hebiscan script to /home/robot134/robotws/src/install/hebiros/lib/hebiros
+[2.039s] Installing testsend script to /home/robot134/robotws/src/install/hebiros/lib/hebiros
+[2.040s] 
+[2.040s] Installed /home/robot134/robotws/src/build/hebiros
+[2.040s] running install_data
+[2.076s] Invoked command in '/home/robot134/robotws/src/build/hebiros' returned '0': PYTHONPATH=/home/robot134/robotws/src/build/hebiros/prefix_override:/home/robot134/robotws/src/install/hebiros/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py develop --editable --build-directory /home/robot134/robotws/src/build/hebiros/build --no-deps install_data

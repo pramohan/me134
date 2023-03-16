@@ -1,0 +1,5 @@
+[console_scripts]
+hebinode = hebiros.hebinode:main
+hebiscan = hebiros.hebiscan:main
+testsend = hebiros.testsend:main
+

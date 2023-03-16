@@ -6,12 +6,17 @@
 #
 import numpy as np
 import rclpy
+import cv2
+import cv_bridge
+import time
 
 from rclpy.node             import Node
 from sensor_msgs.msg        import JointState
+from sensor_msgs.msg        import CameraInfo
+from sensor_msgs.msg        import Image
 from std_msgs.msg           import Empty
 from rclpy.qos              import QoSProfile, DurabilityPolicy
-from std_msgs.msg           import String
+from std_msgs.msg           import String, Int32, Int64, Float32MultiArray
 from urdf_parser_py.urdf    import Robot
 
 from operation.TransformHelpers import *
@@ -30,58 +35,96 @@ if __name__ == "__main__":
     # Prepare the print format.
     np.set_printoptions(precision=6, suppress=True)
 
-    # Test...
-    # R = Rotx(np.radians(45))
-    # print("R:\n", R)
-
-    # quat = quat_from_R(R)
-    # print("quat:\n", quat)
-
-    # print("R_from_quat():\n",  R_from_quat(quat))
 
 #
 #   DEMO Node Class
 #
 class DemoNode(Node):
-    # Initialization.
+    # Initialization code run at the beginning
     def __init__(self, name):
         # Initialize the node, naming it as specified
         super().__init__(name)
 
-        # Create a temporary subscriber to grab the initial position.
-        self.position0 = np.array(self.grabfbk())
+        # Create aruco location subscriber
+        self.aruco_loc = np.array([])
+        self.aruco_sub = self.create_subscription(Float32MultiArray, '/aruco_location', self.cb_aruco, 10)
+        self.get_logger().info("Waiting for camera publisher...")
+        while len(self.aruco_loc) == 0:
+            rclpy.spin_once(self)
+        self.get_logger().info(str(self.aruco_loc))
+
+        # Create joint state subscriber and save the initial position
+        self.grabpos = np.array([])
+        self.fbksub = self.create_subscription(
+            JointState, '/joint_states', self.cb_pos, 10)
+
+
+        self.get_logger().info("Waiting for initial position...")
+        while len(self.grabpos) == 0:
+            rclpy.spin_once(self)
+        self.position0 = np.copy(self.grabpos)
         self.get_logger().info("Initial positions: %r" % self.position0)
-        self.t0= self.get_clock().now().nanoseconds/10**9
 
         # Create a message and publisher to send the joint commands.
         self.cmdmsg = JointState()
         self.cmdpub = self.create_publisher(JointState, '/joint_commands', 10)
+
+        # Micro-ros parameters
+        self.pot_position = np.array([])
+        self.prev_angle = 0
+
+        self.c_touch = 0
+        self.em_but = 0
+        self.ctrl_mode = 0
+        self.joystick = np.zeros(3)
+
+        self.jvnom = .1/100
+
+        # Micro-ros subscribers and publishers
+        self.pot_sub = self.create_subscription(Int64, '/pot_val', self.cb_pot, 10)
+        self.sensor_sub = self.create_subscription(Int64, '/sensors', self.cb_sensors, 10)
+        self.EM_pub = self.create_publisher(Int32, '/EM_enable', 10)
+
+        self.get_logger().info("Waiting for initial potentiometer position...")
+        while len(self.pot_position) == 0:
+            rclpy.spin_once(self)
 
         # Wait for a connection to happen.  This isn't necessary, but
         # means we don't start until the rest of the system is ready.
         self.get_logger().info("Waiting for a /joint_commands subscriber...")
         while(not self.count_subscribers('/joint_commands')):
             pass
-
-        # Create a subscriber to continually receive joint state messages.
-        self.fbksub = self.create_subscription(
-            JointState, '/joint_states', self.recvfbk, 10)
+        
+        self.get_logger().info("Waiting for a /EM_enable subscriber...")
+        while(not self.count_subscribers('/EM_enable')):
+            pass
 
         # Create an object for the kinematic chain
         self.fnode = Node("fkin")
         self.chain = KinematicChain(self.fnode, 'world', 'tip', ['base', 'shoulder', 'elbow', 'wrist', 'finger'])
+        self.chain.setjoints(self.position0)
         self.q_safe = np.array([0.0, 0.0, .0, 1.57, .0])
-        
+        self.pinv_gam = 1
+
         # Grab movement segments for task
-        self.segments_for_x()
+        self.mode = "auto"
+
+        self.q_safe_joystick = np.array([-0.04132938, -0.25080585,  0.43648836,  2.2944777 ,  0.70725644])
+        self.q_d_joystick = np.copy(self.q_safe_joystick)
+        self.q_safe_dropoff = np.array([-0.95291615, -1.03956223, -0.65856385,  2.2692852 , -0.42099997])
+        self.p_safe_dropoff = np.array([-0.35, 0.40, 0.05])
+        #self.segments_for_aruco()
+        #self.segments_for_x()
         #self.segments_for_line()
+        #self.segments_for_pot(self.position0)
+        #self.segments_for_joy(self.position0)
+        self.segments_for_remove(self.position0)
         self.cseg = 0
-        # self.ignore = 1
-        # x_d1 = np.array([-0.4, -0., 0.2]) # the middle X on the table
-        # self.segments = [Goto(self.chain.fkin(self.position0.flatten()), x_d1, 4, 'Task'),
-        #                  Goto(x_d1, x_d1, 4, 'Task')]
-        # Subscribe to the flip command
-        #self.flipsub = self.create_subscription(Empty, '/flip', self.cb_flip, 1)
+        self.prev_pos = self.position0
+
+        self.em_int = 0
+
+        self.t0= self.get_clock().now().nanoseconds/10**9
 
         # Create a timer to keep calculating/sending commands.
         rate       = RATE
@@ -89,263 +132,318 @@ class DemoNode(Node):
         self.get_logger().info("Sending commands with dt of %f seconds (%fHz)" %
                                (self.timer.timer_period_ns * 1e-9, rate))
 
-        # for ikin
-        # none are used unless the stuff in get_position are uncommented
-        self.err = 0
-        self.q = np.array([0, 0, 0]).reshape(3,1)   
-        
-        # Save gravity model parameters
-        self.coeffs = [0,0,0,-1.3]#[3.0, 0.5, -1.0, 1.0]
+    def publish_EM(self, number):
+        if number != 0 and number != 1:
+            self.get_logger().warn("beech, the number is either 0 or 1")
+        self.EM_pub.publish(Int32(data = number))
 
-        self.prev_pos = 0
-        self.moving = False
-        self.flipping = False
-        
-        # Subscribe to a number
-        #self.numbersub = self.create_subscription(Float, '/number', self.cb_number, 1)
+    # Aruco position callback
+    def cb_aruco(self, msg):
+        self.aruco_loc = np.array(msg.data)
+    
+    # Joint states callback
+    def cb_pos(self, fbkmsg):
+        self.grabpos   = np.array(list(fbkmsg.position))
+    
+    # Micro ros sensor callback
+    def cb_sensors(self, msg):
+        s_raw = msg.data
+        zdir = s_raw%10
+        zdir = -1 if zdir == 0 else 1
+        s_raw = s_raw//10
+        self.c_touch = s_raw%10
+        s_raw = s_raw//10
+        self.em_but = s_raw%10
+        s_raw = s_raw//10
+        self.ctrl_mode = s_raw%10 # 1 for joystick 0 for pots
+        s_raw = s_raw//10
+        self.joystick[-1] = (s_raw%10) * zdir
+        s_raw = s_raw//10
+        self.joystick[-2] = -(((s_raw%1000)  // 200) -2)
+        self.joystick[-3] = -(((s_raw//1000) // 200) -2)
+        self.joystick *= self.jvnom
 
+    # Micro ros potentiometer callback
+    def cb_pot(self, msg):
+        pv_raw = msg.data
+        joints = []
+        for i in range(5):
+            joints.append(pv_raw%1000 + 0.)
+            pv_raw = pv_raw // 1000
 
-    def cb_flip(self, msg):
-        self.flipping = True
-        self.get_logger().info("Flipping...")
-        q = np.copy(self.grabpos)
-        q0 = np.array([q[0] + (np.pi if q[0] <0 else -np.pi),q[1],q[2]])
-        q1 = np.array([q0[0], (np.pi-abs(q[1]))*np.sign(q[1]), q[2]])
-        q2 = np.array([q1[0], q1[1], -q[2]])
-        self.prev_pos = q2 # update for check_contact() comparison
-        # self.get_logger().info(str(q))
-        # self.get_logger().info(str(q0))
-        # self.get_logger().info(str(q1))
-        # self.get_logger().info(str(q2))
-        # self.get_logger().info("bruh")
-        self.chain.setjoints(q2)
+        joints = np.array(joints)
+        joints = joints/1000. -0.5
+        joints *= np.pi/1.5
+        joints[-2] += 1.57
+        joints[-1] *= 2
+
+        if len(self.pot_position) == 0:
+            self.pot_position = np.copy(joints)
+        else:
+            self.pot_position += 1./RATE*(joints-self.pot_position)
+    
+    # Create segments to aruco reading
+    def segments_for_aruco(self):
+        self.ignore = 1 # ignore spline from initial pos to home
+        self.chain.setjoints(self.q_safe)
         x_0 = self.chain.ptip().flatten()
 
-        self.t0    = self.get_clock().now().nanoseconds/10**9 #self.t0 + self.segments[self.cseg].duration()
+        x_d1 = self.aruco_loc[0:3]
+        x_d1_altitude = x_d1.copy()
+        x_d1_altitude[2] += 0.05
 
-        self.segments = [Goto(q, q2, 4.0, 'Joint'),
-                         #Goto(q0, q1, 4.0, 'Joint'),
-                         #Goto(q1, q2, 4.0, 'Joint'),
-                         Goto(x_0, self.x_SL[0], 4, 'Task'),
-                         Goto(self.x_SL[0], self.x_SL[1], 4, 'Task'),
-                         Goto(self.x_SL[1], self.x_SL[0], 4, 'Task')]
-        self.ignore = 2 # ignore spline from 
-        self.cseg = 0
+        x_d2 = self.aruco_loc[3:]
+        x_d2_altitude = x_d2.copy()
+        x_d2_altitude[2] += 0.05
 
+        # self.get_logger().info(str(x_d1))
+        # self.get_logger().info(str(x_d2))
+
+        self.segments = [Goto(self.position0, self.q_safe, 3.0, ['Joint', 0]),
+                         Goto(x_0, x_d1_altitude, 3.0, ['Task', 0]),
+                         Goto(x_d1_altitude, x_d1, 2.0, ['Task', 1]),
+                         Hold(x_d1, 0.7, ['Task', 1]),
+                         Goto(x_d1, x_d1_altitude, 2.0, ['Task', 1]),
+                         Goto(x_d1_altitude, x_d2_altitude, 3.0, ['Task', 1]),
+                         Goto(x_d2_altitude, x_d2, 2.0, ['Task', 1]),
+                         Hold(x_d2, 0.7, ['Task', 0]),
+                         Goto(x_d2, x_d2_altitude, 2.0, ['Task', 0]),
+                         Goto(x_d2_altitude, x_0, 3.0, ['Task', 0])]
+    
+    def segments_for_remove(self, p0):
+        self.chain.setjoints(p0)
+        self.ignore = 1 # ignore spline from initial pos to home
+        self.segments = [Goto(p0, self.q_safe_dropoff, 2.0, ['Joint', 0])]
+
+    def segments_for_pot(self, p0):
+        self.ignore = 1 # ignore spline from initial pos to home
+        self.segments = [Goto(p0, self.q_safe, 2.0, ['Joint', -1]),
+                         Goto(self.q_safe, self.pot_position, 2.0, ['Joint', -1])]
+
+    def segments_for_joy(self, p0):
+        self.q_d_joystick = np.copy(self.q_safe_joystick)
+        self.ignore = 1 # ignore spline from initial pos to home
+        self.segments = [Goto(p0, self.q_safe_joystick, 2.0, ['Joint', -1])]
 
     def segments_for_x(self):
         # moves arm to each point
         self.ignore = 1 # ignore spline from initial pos to home
         self.chain.setjoints(self.q_safe)
         x_0 = self.chain.ptip().flatten()
-        x_d1 = np.array([-0.4, -0., 0.2]) # the middle X on the table
-        x_d2 = np.array([-0.30, 0.15, 0.2]) # left X
+        x_d1 = np.array([-0.6, 0, 0.03]) # the middle X on the table
+        x_d2 = np.array([-0.3, 0.165, 0.03]) # left X
         # x_d3 = np.array([-0.075, 0.105, 0.02]) # right X
-
-        # self.segments = [Goto(self.position0, self.q_safe, 3.0, 'Joint'),
-        #                  Goto(x_0, x_d1, 3.0, 'Task'),
-        #                  Goto(x_d1, x_0, 3.0, 'Task'),
-        #                  Goto(x_0, x_d2, 3.0, 'Task'),
-        #                  Goto(x_d2, x_0, 3.0, 'Task'),
-        #                  Goto(x_0, x_d3, 3.0, 'Task'),
-        #                  Goto(x_d3, x_0, 3.0, 'Task'),]
 
         self.segments = [Goto(self.position0, self.q_safe, 3.0, 'Joint'),
                          Goto(x_0, x_d1, 3.0, 'Task'),
                          Goto(x_d1, x_0, 3.0, 'Task'),
                          Goto(x_0, x_d2, 3.0, 'Task'),
                          Goto(x_d2, x_0, 3.0, 'Task')]
-    
-    def segments_for_line(self):
-        # moves arm horizontally in front
-        self.ignore = 1 # ignore spline from initial pos to home
-        self.chain.setjoints(self.position0)
-        x_0 = self.chain.ptip().flatten()
-
-        x_SL1 = np.array([-0.3, -0.15, 0.15])
-        x_SL2 = np.array([-0.3, 0.15, 0.15])
-        self.x_SL = [x_SL1, x_SL2]
-
-        self.segments = [Goto(x_0, x_SL1, 4.0, 'Task'),
-                         Goto(x_SL1, x_SL2, 4.0, 'Task'),
-                         Goto(x_SL2, x_SL1, 4.0, 'Task'),]
 
         
-    def ikin_NR(self, xd, q_guess):
+    def ikin_NR(self, xd, q_g0):
         # performs the Newton-Raphson algorithm to find the ikin
-        xd = xd.reshape(5,1)
-        q_guess = np.reshape(q_guess.copy(), (5,1))
+        xd = np.copy(xd).reshape(5,1)
+        q_guess = np.reshape(np.copy(q_g0), (5,1))
         self.chain.setjoints(q_guess)
 
-        q_g0 = q_guess.copy()
-
-        for ctr in range(20):
+        for ctr in range(7):
             #J  = np.vstack((self.chain.Jv(),self.chain.Jw())) # shape (6,3)
             x = np.vstack((self.chain.ptip(), 
                            q_guess[1]-q_guess[2]+q_guess[3]-1.57, 
                            q_guess[0]-q_guess[4]))
             
-            Jv = self.chain.Jv()
-            J = np.vstack((Jv, np.array([[0.,1.,-1.,1.,0.],[1.,0.,0.,0.,-1.]])))
+            J = np.vstack((self.chain.Jv(),
+                            np.array([0.,1.,-1.,1.,0.]),
+                            np.array([1.,0.,0.,0.,-1.])))
 
             e = xd - x # shape (3,1)
-            q_guess += (np.linalg.pinv(J) @ e)
+
+            J_inv = np.linalg.inv((J.T @ J) + (np.eye(J.shape[1]) * self.pinv_gam**2)) @ J.T
+            q_guess += (J_inv @ e)
             self.chain.setjoints(q_guess)
-            #print(np.linalg.norm(e))
+            # self.get_logger().info(str(np.linalg.norm(e)))
             if np.linalg.norm(e) < 10**-6:
                 break
-            if ctr > 2: 
-                self.get_logger().warn("Warning: IKIN did not converge")
+            # if ctr > 2:
+            #     self.get_logger().warn("IKIN not converge")
+        
 
         return np.array(q_guess).flatten()
-
+    
     def gravity(self, pos):
-        # calculates effort required to hold position
-        # i.e., counters gravity
-        self.coeffs = [0,0,0,-1.2]
+        self.coeffs = np.array([2.21423, 3.39517, 0.59880, 0.31392])
         t1 = pos[1]
         t2 = pos[2]
-        tau1 =  self.coeffs[0]*np.sin(t1+t2) +\
-                self.coeffs[1]*np.cos(t1+t2) +\
-                self.coeffs[2]*np.sin(t1) +\
-                self.coeffs[3]*np.cos(t1)
-        tau2 = self.coeffs[0]*np.sin(t1+t2) + self.coeffs[1]*np.cos(t1 + t2)
-        return np.array([0.0, tau1, -tau2])
+        t3 = pos[3]
+        
+        tau3 = self.coeffs[2]*np.sin(t3-t2+t1) - self.coeffs[3]*np.cos(t3-t2+t1) 
+        tau2 =-self.coeffs[1]*np.cos(t2-t1) - tau3
+        tau1 =-self.coeffs[0]*np.sin(t1) - tau2
+        return np.array([0.,tau1,tau2,tau3,0.])
+    
     def shutdown(self):
+        self.publish_EM(0)
         # No particular cleanup, just shut down the node.
         self.fnode.destroy_node()
         self.destroy_node()
 
+    def update_pot(self, t):
+        if self.ctrl_mode == 1:
+            self.mode = 'joy'
+            self.segments = []
+            self.segments_for_joy(self.grabpos)
+            self.t0 = t
+            self.cseg = 0
 
-    # Grab a single feedback - do not call this repeatedly.
-    def grabfbk(self):
-        # Create a temporary handler to grab the position.
-        def cb(fbkmsg):
-            self.grabpos   = np.array(list(fbkmsg.position))
-            self.grabready = True
+        if self.cseg >= len(self.segments):
+            return self.pot_position, []
+        (position, velocity) = self.segments[self.cseg].evaluate(t-self.t0)
 
-        # Temporarily subscribe to get just one message.
-        sub = self.create_subscription(JointState, '/joint_states', cb, 1)
-        self.grabready = False
-        while not self.grabready:
-            rclpy.spin_once(self)
-        self.destroy_subscription(sub)
-
-        # Return the values.
-        return self.grabpos
-
-    # Receive feedback - called repeatedly by incoming messages.
-    def recvfbk(self, fbkmsg):
-        self.grabpos   = np.array(list(fbkmsg.position))
+        if(t - self.t0 >= self.segments[self.cseg].duration()):
+            self.t0    = self.t0 + self.segments[self.cseg].duration()
+            self.cseg = (self.cseg+1)
+        
+        return position, []
     
+    def update_joy(self, t):
+        if self.ctrl_mode == 0:
+            self.mode = 'pot'
+            self.segments = []
+            self.segments_for_pot(self.grabpos)
+            self.t0 = t
+            self.cseg = 0
+        
+        if self.cseg < len(self.segments):
+            (position, velocity) = self.segments[self.cseg].evaluate(t-self.t0)
+
+            if(t - self.t0 >= self.segments[self.cseg].duration()):
+                self.t0    = self.t0 + self.segments[self.cseg].duration()
+                self.cseg = (self.cseg+1)
+            
+            #self.q_d_joystick[-1] = self.pot_position[-1]
+            return position, []
+        
+        self.chain.setjoints(self.q_d_joystick)
+        xc = self.chain.ptip().flatten()
+        xd = xc + self.joystick
+
+        QDJ = self.q_d_joystick.copy()
+        QDJ[-1] = self.pot_position[-1]
+        if np.sum(self.joystick) == 0: return QDJ, [0.,0.,0.,0.,0.02]
+        xd = np.vstack((xd.reshape(-1,1), np.array([[0.],[0.]])))
+        joints = self.ikin_NR(xd, np.copy(self.q_d_joystick))
+
+        self.q_d_joystick = np.copy(joints)
+
+        #self.get_logger().info(str(xc))
+        #self.get_logger().info(str(xd))
+
+        joints[-1] = self.pot_position[-1]
+        return joints, []
+    
+    def append_remove_chunk(self, P_rem):
+        x_d1_a = P_rem.copy() + np.array([0,0,0.05])
+        self.chain.setjoints(self.q_safe_dropoff)
+        p_safe = self.chain.ptip().flatten()
+        self.segments.append(Goto(p_safe, self.p_safe_dropoff, 3.0, ['Task', 0]))
+        self.segments.append(Goto(self.p_safe_dropoff, x_d1_a, 3.0, ['Task', 0]))
+        self.segments.append(Goto(x_d1_a, P_rem, 3.0, ['Task', 1]))
+        self.segments.append(Hold(P_rem, 0.7, ['Task', 1]))
+        self.segments.append(Goto(P_rem, x_d1_a, 3.0, ['Task', 1]))
+        self.segments.append(Goto(x_d1_a, self.p_safe_dropoff, 3.0, ['Task', 1]))
+        self.segments.append(Hold(self.p_safe_dropoff, 0.7, ['Task', 0]))
+        self.segments.append(Goto(self.p_safe_dropoff, p_safe, 3.0, ['Task', 0]))
+
+    def update_remove(self, t):
+        if(t - self.t0 >= self.segments[self.cseg].duration()):
+            self.t0    = self.t0 + self.segments[self.cseg].duration()
+            self.cseg = self.cseg +1
+
+            if self.cseg >= len(self.segments):
+                if len(self.aruco_loc) == 0:
+                    self.t0 = t
+                    self.cseg = 0
+                    self.segments = []
+                    if self.ctrl_mode == 0:
+                        self.mode = 'pot'
+                        self.segments_for_pot(self.grabpos)
+                    elif self.ctrl_mode == 1:
+                        self.mode = 'joy'
+                        self.segments_for_joy(self.grabpos)
+                    return self.grabpos, []
+                else:
+                    P = np.array([self.aruco_loc[0], self.aruco_loc[1], 0.01])
+                    self.append_remove_chunk(P)
+            
+                    #self.get_logger().info("sending to")
+                    #self.get_logger().info(str(P))
+
+            magnet = self.segments[self.cseg].space()[1]
+            if magnet != -1: self.em_int = magnet
+        
+        (position, velocity) = self.segments[self.cseg].evaluate(t-self.t0)
+        #self.get_logger().info(str(position))
+        if (self.segments[self.cseg].space()[0] == 'Task'):
+            x = np.vstack((position.reshape(-1,1), np.array([[0.01],[0.01]])))
+            #self.get_logger().info(str(x))
+            position = self.ikin_NR(x, np.reshape(self.prev_pos,(5,1)))
+        
+            self.prev_pos = position
+        return position, []
+
+
     def update(self, t):
+        if self.mode == 'pot': return self.update_pot(t)
+        if self.mode == 'joy': return self.update_joy(t)
+        if self.mode == 'auto': return self.update_remove(t)
+        
         # once segment completed, move on to new segment
         if(t - self.t0 >= self.segments[self.cseg].duration()):
-            # update for check_contact()
-            self.flipping = False
             self.t0    = self.t0 + self.segments[self.cseg].duration()
-            # wrap around to beginning of list
             self.cseg = (self.cseg+1) % len(self.segments)
-            # skip over the ignores
             self.cseg += self.ignore if self.cseg==0 else 0
-        
-        cpos = np.copy(self.grabpos)
-
+            magnet = self.segments[self.cseg].space()[1]
+            if magnet != -1: self.em_int = magnet
+                
         # Decide what to do based on the space.
-        if (self.segments[self.cseg].space() == 'Joint'):
-            # Set the message positions/velocities as a function of time.
-            (position, velocity) = \
-                self.segments[self.cseg].evaluate(t-self.t0)
-        else: # Task space
-            # Get the position and velocity of the task spline
+        (position, velocity) = self.segments[self.cseg].evaluate(t-self.t0)
+        if (self.segments[self.cseg].space()[0] == 'Task'):
             (position, velocity) = self.segments[self.cseg].evaluate(t-self.t0)
-            
             x = np.vstack((position.reshape(-1,1), np.array([[0.01],[0.01]])))
-            # Find the angle to move to and assign it to guess, since it will be
-            # used as the guess for the next angle
-            #print('prev ', self.prev_pos)
             position = self.ikin_NR(x, np.reshape(self.prev_pos,(5,1)))
-            #print(position.shape)
-            # print(self.ikin_NR(position, self.grabpos))
-            # Get the translation and jacobian for the new angle (stored in guess)
-            # (T, J) = self.kin.fkin(self.guess)
-            
-            # Calculate the angular velocity by inverting J and multiplying with xdot
-            # cmdmsg.velocity = np.matmul(np.linalg.inv(J[0:3]), velocity)
-            
-            # New position is just the new theta, so the guess
-            #cmdmsg.position = self.guess
-            
-        # Send the command (with the current time).
-        #cmdmsg.header.stamp = rospy.Time.now()
-        #self.pub.publish(cmdmsg)
-        self.prev_pos = position
-        return position
-
-    def gravity(self, pos):
-        # calculates effort required to hold position
-        # i.e., counters gravity
-        self.coeffs = [0,3,-0.2,0]
-        t1 = pos[1]
-        t2 = pos[2]
-        tau1 =  self.coeffs[0]*np.sin(t1+t2) +\
-                self.coeffs[1]*np.cos(t1+t2) +\
-                self.coeffs[2]*np.sin(t1) +\
-                self.coeffs[3]*np.cos(t1)
-        tau2 = self.coeffs[0]*np.sin(t1+t2) + self.coeffs[1]*np.cos(t1 + t2)
-        return np.array([0.0, tau1, -tau2])
-    
-    def check_contact(self, curr_pos, time):
-        # compares current position with previous position
-        # if the curent position is past an allowable threshold, the arm flips
-        if self.flipping:
-            return
-        d_pos0 = np.abs(self.prev_pos[0]-curr_pos[0])
-        d_pos1 = np.abs(self.prev_pos[1]-curr_pos[1])
-        d_pos2 = np.abs(self.prev_pos[2]-curr_pos[2])
-        max_d = 0.03
-        if d_pos0 > max_d or d_pos1 > max_d or d_pos2 > max_d:
-            self.get_logger().info(f"contact detected at {time}. effort:  {[d_pos0, d_pos1, d_pos2]}")   
-            self.cb_flip('std_msgs/Empty')
-                   
-    # not in-use right now (from Week 4 goals)
-    def cb_number(self, msg):
-        self.A = msg.data
-        self.get_logger().info("received: %r" % msg.data)
+        
+            self.prev_pos = position
+        return position, []
 
     # Send a command - called repeatedly by the timer.
     def sendcmd(self):
         timesec = self.get_clock().now().nanoseconds/10**9 - self.t0
         t = self.get_clock().now().nanoseconds/(10**9)
 
-        sendPos = self.update(t)
-        #print(self.gravity(self.actpos))
-        #print("")
-
-        # print forward kinematics position
-        # fkin = self.chain.fkin(self.grabpos)
-        # print(np.squeeze(fkin[0]))
-
-        # if there's contact detected, the arm flips
-        #self.check_contact(self.grabpos, t)
-
+        sendPos, sendVel = self.update(t)
+        sendPos = sendPos.tolist()
         sendEff = self.gravity(self.grabpos).tolist()
-        sendEff.extend([0.0,0.0])
 
-        #print(sendPos)
-        self.get_logger().info(str(self.grabpos))
-
+        # self.get_logger().info("haskjg")
+        # self.get_logger().info(str(sendPos))
+        # self.get_logger().info(str(sendVel))
+        # self.get_logger().info(str(sendEff))
+        #self.get_logger().info(str(self.pot_position))
+        #self.get_logger().info(str(self.joystick))
 
         self.cmdmsg.header.stamp = self.get_clock().now().to_msg()
         self.cmdmsg.name         = ['base', 'shoulder','elbow', 'wrist', 'finger']
-        # self.cmdmsg.position     = [0.0, 0.0, 0.0, 0.0, 0.0] # [float("nan"), float("nan"), float("nan"), float("nan"), float("nan")]
-        self.cmdmsg.position     =  sendPos.tolist()
-        self.cmdmsg.velocity     = []
-        #self.cmdmsg.velocity     = [float("nan"), float("nan"), float("nan")]
-        self.cmdmsg.effort       = [] #sendEff#.tolist().extend([0,0])
-        #self.cmdmsg.effort       = sendEff.tolist()
-        #self.cmdpub.publish(self.cmdmsg)
+        self.cmdmsg.position     = sendPos
+        self.cmdmsg.velocity     = sendVel
+        self.cmdmsg.effort       = sendEff
+        self.cmdpub.publish(self.cmdmsg)
 
+
+        if self.mode == 'joy' or self.mode == 'pot':
+            self.publish_EM(self.em_but)
+        else:
+            self.publish_EM(self.em_int)
 
 
 #

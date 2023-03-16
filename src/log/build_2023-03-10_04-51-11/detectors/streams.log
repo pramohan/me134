@@ -1,0 +1,32 @@
+[1.655s] Invoking command in '/home/robot134/robotws/src/build/detectors': PYTHONPATH=/home/robot134/robotws/src/build/detectors/prefix_override:/home/robot134/robotws/src/install/detectors/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py develop --editable --build-directory /home/robot134/robotws/src/build/detectors/build --no-deps install_data
+[2.103s] running develop
+[2.104s] /usr/lib/python3/dist-packages/setuptools/command/easy_install.py:158: EasyInstallDeprecationWarning: easy_install command is deprecated. Use build and pip and other standards-based tools.
+[2.104s]   warnings.warn(
+[2.106s] /usr/lib/python3/dist-packages/setuptools/command/install.py:34: SetuptoolsDeprecationWarning: setup.py install is deprecated. Use build and pip and other standards-based tools.
+[2.106s]   warnings.warn(
+[2.209s] /usr/lib/python3/dist-packages/pkg_resources/__init__.py:116: PkgResourcesDeprecationWarning: 1.16.0-unknown is an invalid version and will not be supported in a future release
+[2.210s]   warnings.warn(
+[2.210s] /usr/lib/python3/dist-packages/pkg_resources/__init__.py:116: PkgResourcesDeprecationWarning: 1.1build1 is an invalid version and will not be supported in a future release
+[2.210s]   warnings.warn(
+[2.211s] /usr/lib/python3/dist-packages/pkg_resources/__init__.py:116: PkgResourcesDeprecationWarning: 0.1.43ubuntu1 is an invalid version and will not be supported in a future release
+[2.211s]   warnings.warn(
+[2.414s] running egg_info
+[2.415s] writing detectors.egg-info/PKG-INFO
+[2.415s] writing dependency_links to detectors.egg-info/dependency_links.txt
+[2.415s] writing entry points to detectors.egg-info/entry_points.txt
+[2.416s] writing requirements to detectors.egg-info/requires.txt
+[2.416s] writing top-level names to detectors.egg-info/top_level.txt
+[2.419s] reading manifest file 'detectors.egg-info/SOURCES.txt'
+[2.422s] writing manifest file 'detectors.egg-info/SOURCES.txt'
+[2.425s] running build_ext
+[2.425s] Creating /home/robot134/robotws/src/install/detectors/lib/python3.10/site-packages/detectors.egg-link (link to .)
+[2.427s] Installing balldetector script to /home/robot134/robotws/src/install/detectors/lib/detectors
+[2.427s] Installing depthincenter script to /home/robot134/robotws/src/install/detectors/lib/detectors
+[2.427s] Installing detectaruco script to /home/robot134/robotws/src/install/detectors/lib/detectors
+[2.428s] Installing facedetector script to /home/robot134/robotws/src/install/detectors/lib/detectors
+[2.428s] Installing writearuco script to /home/robot134/robotws/src/install/detectors/lib/detectors
+[2.429s] 
+[2.429s] Installed /home/robot134/robotws/src/build/detectors
+[2.429s] running install_data
+[2.429s] copying launch/detectaruco.launch.py -> /home/robot134/robotws/src/install/detectors/share/detectors/launch
+[2.471s] Invoked command in '/home/robot134/robotws/src/build/detectors' returned '0': PYTHONPATH=/home/robot134/robotws/src/build/detectors/prefix_override:/home/robot134/robotws/src/install/detectors/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py develop --editable --build-directory /home/robot134/robotws/src/build/detectors/build --no-deps install_data

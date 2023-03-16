@@ -1,0 +1,27 @@
+[1.327s] Invoking command in '/home/robot134/robotws/src/build/operation': PYTHONPATH=/home/robot134/robotws/src/build/operation/prefix_override:/home/robot134/robotws/src/install/operation/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py develop --editable --build-directory /home/robot134/robotws/src/build/operation/build --no-deps install_data
+[1.744s] running develop
+[1.744s] /usr/lib/python3/dist-packages/setuptools/command/easy_install.py:158: EasyInstallDeprecationWarning: easy_install command is deprecated. Use build and pip and other standards-based tools.
+[1.744s]   warnings.warn(
+[1.746s] /usr/lib/python3/dist-packages/setuptools/command/install.py:34: SetuptoolsDeprecationWarning: setup.py install is deprecated. Use build and pip and other standards-based tools.
+[1.746s]   warnings.warn(
+[1.847s] /usr/lib/python3/dist-packages/pkg_resources/__init__.py:116: PkgResourcesDeprecationWarning: 1.16.0-unknown is an invalid version and will not be supported in a future release
+[1.847s]   warnings.warn(
+[1.847s] /usr/lib/python3/dist-packages/pkg_resources/__init__.py:116: PkgResourcesDeprecationWarning: 1.1build1 is an invalid version and will not be supported in a future release
+[1.847s]   warnings.warn(
+[1.848s] /usr/lib/python3/dist-packages/pkg_resources/__init__.py:116: PkgResourcesDeprecationWarning: 0.1.43ubuntu1 is an invalid version and will not be supported in a future release
+[1.848s]   warnings.warn(
+[1.996s] running egg_info
+[1.996s] writing operation.egg-info/PKG-INFO
+[1.996s] writing dependency_links to operation.egg-info/dependency_links.txt
+[1.996s] writing entry points to operation.egg-info/entry_points.txt
+[1.997s] writing requirements to operation.egg-info/requires.txt
+[1.997s] writing top-level names to operation.egg-info/top_level.txt
+[1.999s] reading manifest file 'operation.egg-info/SOURCES.txt'
+[2.000s] writing manifest file 'operation.egg-info/SOURCES.txt'
+[2.001s] running build_ext
+[2.001s] Creating /home/robot134/robotws/src/install/operation/lib/python3.10/site-packages/operation.egg-link (link to .)
+[2.002s] Installing demo134 script to /home/robot134/robotws/src/install/operation/lib/operation
+[2.002s] 
+[2.003s] Installed /home/robot134/robotws/src/build/operation
+[2.003s] running install_data
+[2.031s] Invoked command in '/home/robot134/robotws/src/build/operation' returned '0': PYTHONPATH=/home/robot134/robotws/src/build/operation/prefix_override:/home/robot134/robotws/src/install/operation/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py develop --editable --build-directory /home/robot134/robotws/src/build/operation/build --no-deps install_data

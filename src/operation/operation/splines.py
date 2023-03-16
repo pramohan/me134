@@ -24,7 +24,7 @@ from sensor_msgs.msg   import JointState
 
 class CubicSpline:
     # Initialize.
-    def __init__(self, p0, v0, pf, vf, T, space='Joint'):
+    def __init__(self, p0, v0, pf, vf, T, space=['Joint', 0]):
         # Precompute the spline parameters.
         self.T = T
         self.a = p0
@@ -42,6 +42,15 @@ class CubicSpline:
     def duration(self):
         return(self.T)
 
+    def update(self, pc, vc, pfn, vfn, T=None):
+        if T is not None:
+            self.T = T
+        T = self.T
+        self.a = pc
+        self.b = vc
+        self.c = 3*(pfn-pc)/T**2 - vfn/T    - 2*vc/T
+        self.d = -2*(pfn-pc)/T**3 + vfn/T**2 +   vc/T**2
+
     # Compute the position/velocity for a given time (w.r.t. t=0 start).
     def evaluate(self, t):
         # Compute and return the position and velocity.
@@ -51,16 +60,22 @@ class CubicSpline:
 
 class Goto(CubicSpline):
     # Use zero initial/final velocities (of same size as positions).
-    def __init__(self, p0, pf, T, space='Joint'):
+    def __init__(self, p0, pf, T, space=['Joint', 0]):
         CubicSpline.__init__(self, p0, 0*p0, pf, 0*pf, T, space)
+    
+    def update(self, pc, vc, pfn, T=None):
+        if T is not None:
+            CubicSpline.update(self, pc, vc, pfn, 0, T)
+        else:
+            CubicSpline.update(self, pc, vc, pfn, 0)
 
 class Hold(Goto):
     # Use the same initial and final positions.
-    def __init__(self, p, T, space='Joint'):
+    def __init__(self, p, T, space=['Joint', 0]):
         Goto.__init__(self, p, p, T, space)
 
 class Stay(Hold):
     # Use an infinite time (stay forever).
-    def __init__(self, p, space='Joint'):
+    def __init__(self, p, space=['Joint', 0]):
         Hold.__init__(self, p, math.inf, space)
 
