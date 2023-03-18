@@ -45,19 +45,21 @@ class DemoNode(Node):
         # Initialize the node, naming it as specified
         super().__init__(name)
 
-        # Create aruco location subscriber
-        self.aruco_loc = np.array([])
-        self.aruco_sub = self.create_subscription(Float32MultiArray, '/aruco_location', self.cb_aruco, 10)
-        self.get_logger().info("Waiting for camera publisher...")
-        while len(self.aruco_loc) == 0:
+        # Create detector subscribers
+        self.on_blue = None
+        self.matches = None
+        self.nomatches = None
+        self.bluesub = self.create_subscription(Float32MultiArray, '/on_blue', self.cb_blue, 10)
+        self.Msub = self.create_subscription(Float32MultiArray, '/matches', self.cb_M, 10)
+        self.NMsub = self.create_subscription(Float32MultiArray, '/no_match', self.cb_NM, 10)
+        
+        self.get_logger().info("Waiting for detectors...")
+        while isinstance(self.on_blue, type(None)) or isinstance(self.matches, type(None)):# or isinstance(self.nomatches, type(None)) :
             rclpy.spin_once(self)
-        self.get_logger().info(str(self.aruco_loc))
 
         # Create joint state subscriber and save the initial position
         self.grabpos = np.array([])
-        self.fbksub = self.create_subscription(
-            JointState, '/joint_states', self.cb_pos, 10)
-
+        self.fbksub = self.create_subscription(JointState, '/joint_states', self.cb_pos, 10)
 
         self.get_logger().info("Waiting for initial position...")
         while len(self.grabpos) == 0:
@@ -77,7 +79,6 @@ class DemoNode(Node):
         self.em_but = 0
         self.ctrl_mode = 0
         self.joystick = np.zeros(3)
-
         self.jvnom = .1/100
 
         # Micro-ros subscribers and publishers
@@ -107,23 +108,26 @@ class DemoNode(Node):
         self.pinv_gam = 1
 
         # Grab movement segments for task
-        self.mode = "auto"
+        self.mode = "auto_insert"
 
         self.q_safe_joystick = np.array([-0.04132938, -0.25080585,  0.43648836,  2.2944777 ,  0.70725644])
         self.q_d_joystick = np.copy(self.q_safe_joystick)
-        self.q_safe_dropoff = np.array([-0.95291615, -1.03956223, -0.65856385,  2.2692852 , -0.42099997])
-        self.p_safe_dropoff = np.array([-0.35, 0.40, 0.05])
-        #self.segments_for_aruco()
-        #self.segments_for_x()
-        #self.segments_for_line()
-        #self.segments_for_pot(self.position0)
-        #self.segments_for_joy(self.position0)
-        self.segments_for_remove(self.position0)
+        self.q_safe_auto = np.array([-0.95291615, -1.03956223, -0.65856385,  2.2692852 , -0.42099997])
+        self.p_safe_dropoff = np.array([[-0.05, 0.42, 0.07], [-0.20, 0.42, 0.07], [-0.35, 0.42, 0.07], [-0.50, 0.42, 0.07]])
+        self.p_overlap_dropoff = np.array([-0.35, 0.42, 0.07, 0, 0])
+
+        if self.mode == 'pot':
+            self.segments_for_pot(self.position0)
+        elif self.mode == 'joy':
+            self.segments_for_joy(self.position0)
+        elif self.mode == 'auto_remove' or self.mode == 'auto_insert':
+            self.segments_for_auto(self.position0)
+        else:
+            raise Exception("INVALID MODE PROVIDED")
+        
         self.cseg = 0
-        self.prev_pos = self.position0
-
         self.em_int = 0
-
+        self.prev_pos = self.position0
         self.t0= self.get_clock().now().nanoseconds/10**9
 
         # Create a timer to keep calculating/sending commands.
@@ -132,18 +136,13 @@ class DemoNode(Node):
         self.get_logger().info("Sending commands with dt of %f seconds (%fHz)" %
                                (self.timer.timer_period_ns * 1e-9, rate))
 
-    def publish_EM(self, number):
-        if number != 0 and number != 1:
-            self.get_logger().warn("beech, the number is either 0 or 1")
-        self.EM_pub.publish(Int32(data = number))
-
     # Aruco position callback
-    def cb_aruco(self, msg):
-        self.aruco_loc = np.array(msg.data)
-    
+    def cb_blue(self, msg): self.on_blue = np.array(msg.data)
+    def cb_M(self,msg): self.matches = np.array(msg.data)
+    def cb_NM(self,msg): self.nomatches = np.array(msg.data)
+
     # Joint states callback
-    def cb_pos(self, fbkmsg):
-        self.grabpos   = np.array(list(fbkmsg.position))
+    def cb_pos(self, fbkmsg): self.grabpos   = np.array(list(fbkmsg.position))
     
     # Micro ros sensor callback
     def cb_sensors(self, msg):
@@ -160,7 +159,7 @@ class DemoNode(Node):
         self.joystick[-1] = (s_raw%10) * zdir
         s_raw = s_raw//10
         self.joystick[-2] = -(((s_raw%1000)  // 200) -2)
-        self.joystick[-3] = -(((s_raw//1000) // 200) -2)
+        self.joystick[-3] = (((s_raw//1000) // 200) -2)
         self.joystick *= self.jvnom
 
     # Micro ros potentiometer callback
@@ -182,38 +181,11 @@ class DemoNode(Node):
         else:
             self.pot_position += 1./RATE*(joints-self.pot_position)
     
-    # Create segments to aruco reading
-    def segments_for_aruco(self):
-        self.ignore = 1 # ignore spline from initial pos to home
-        self.chain.setjoints(self.q_safe)
-        x_0 = self.chain.ptip().flatten()
-
-        x_d1 = self.aruco_loc[0:3]
-        x_d1_altitude = x_d1.copy()
-        x_d1_altitude[2] += 0.05
-
-        x_d2 = self.aruco_loc[3:]
-        x_d2_altitude = x_d2.copy()
-        x_d2_altitude[2] += 0.05
-
-        # self.get_logger().info(str(x_d1))
-        # self.get_logger().info(str(x_d2))
-
-        self.segments = [Goto(self.position0, self.q_safe, 3.0, ['Joint', 0]),
-                         Goto(x_0, x_d1_altitude, 3.0, ['Task', 0]),
-                         Goto(x_d1_altitude, x_d1, 2.0, ['Task', 1]),
-                         Hold(x_d1, 0.7, ['Task', 1]),
-                         Goto(x_d1, x_d1_altitude, 2.0, ['Task', 1]),
-                         Goto(x_d1_altitude, x_d2_altitude, 3.0, ['Task', 1]),
-                         Goto(x_d2_altitude, x_d2, 2.0, ['Task', 1]),
-                         Hold(x_d2, 0.7, ['Task', 0]),
-                         Goto(x_d2, x_d2_altitude, 2.0, ['Task', 0]),
-                         Goto(x_d2_altitude, x_0, 3.0, ['Task', 0])]
-    
-    def segments_for_remove(self, p0):
+    def segments_for_auto(self, p0):
         self.chain.setjoints(p0)
         self.ignore = 1 # ignore spline from initial pos to home
-        self.segments = [Goto(p0, self.q_safe_dropoff, 2.0, ['Joint', 0])]
+        self.segments = [Goto(p0, self.q_safe, 3.0, ['Joint', 0]), 
+                         Goto(self.q_safe, self.q_safe_auto, 3.0, ['Joint', 0])]
 
     def segments_for_pot(self, p0):
         self.ignore = 1 # ignore spline from initial pos to home
@@ -224,22 +196,6 @@ class DemoNode(Node):
         self.q_d_joystick = np.copy(self.q_safe_joystick)
         self.ignore = 1 # ignore spline from initial pos to home
         self.segments = [Goto(p0, self.q_safe_joystick, 2.0, ['Joint', -1])]
-
-    def segments_for_x(self):
-        # moves arm to each point
-        self.ignore = 1 # ignore spline from initial pos to home
-        self.chain.setjoints(self.q_safe)
-        x_0 = self.chain.ptip().flatten()
-        x_d1 = np.array([-0.6, 0, 0.03]) # the middle X on the table
-        x_d2 = np.array([-0.3, 0.165, 0.03]) # left X
-        # x_d3 = np.array([-0.075, 0.105, 0.02]) # right X
-
-        self.segments = [Goto(self.position0, self.q_safe, 3.0, 'Joint'),
-                         Goto(x_0, x_d1, 3.0, 'Task'),
-                         Goto(x_d1, x_0, 3.0, 'Task'),
-                         Goto(x_0, x_d2, 3.0, 'Task'),
-                         Goto(x_d2, x_0, 3.0, 'Task')]
-
         
     def ikin_NR(self, xd, q_g0):
         # performs the Newton-Raphson algorithm to find the ikin
@@ -258,6 +214,8 @@ class DemoNode(Node):
                             np.array([1.,0.,0.,0.,-1.])))
 
             e = xd - x # shape (3,1)
+
+            # self.get_logger().info(str(J.shape))
 
             J_inv = np.linalg.inv((J.T @ J) + (np.eye(J.shape[1]) * self.pinv_gam**2)) @ J.T
             q_guess += (J_inv @ e)
@@ -283,7 +241,7 @@ class DemoNode(Node):
         return np.array([0.,tau1,tau2,tau3,0.])
     
     def shutdown(self):
-        self.publish_EM(0)
+        self.EM_pub.publish(Int32(data = 0))
         # No particular cleanup, just shut down the node.
         self.fnode.destroy_node()
         self.destroy_node()
@@ -342,42 +300,42 @@ class DemoNode(Node):
         joints[-1] = self.pot_position[-1]
         return joints, []
     
-    def append_remove_chunk(self, P_rem):
+    def append_remove_chunk(self, P_rem, P_drop):
         x_d1_a = P_rem.copy() + np.array([0,0,0.05])
-        self.chain.setjoints(self.q_safe_dropoff)
+        self.chain.setjoints(self.q_safe_auto)
         p_safe = self.chain.ptip().flatten()
-        self.segments.append(Goto(p_safe, self.p_safe_dropoff, 3.0, ['Task', 0]))
-        self.segments.append(Goto(self.p_safe_dropoff, x_d1_a, 3.0, ['Task', 0]))
+        self.segments.append(Goto(p_safe, P_drop, 3.0, ['Task', 0]))
+        self.segments.append(Goto(P_drop, x_d1_a, 3.0, ['Task', 0]))
         self.segments.append(Goto(x_d1_a, P_rem, 3.0, ['Task', 1]))
         self.segments.append(Hold(P_rem, 0.7, ['Task', 1]))
         self.segments.append(Goto(P_rem, x_d1_a, 3.0, ['Task', 1]))
-        self.segments.append(Goto(x_d1_a, self.p_safe_dropoff, 3.0, ['Task', 1]))
-        self.segments.append(Hold(self.p_safe_dropoff, 0.7, ['Task', 0]))
-        self.segments.append(Goto(self.p_safe_dropoff, p_safe, 3.0, ['Task', 0]))
+        self.segments.append(Goto(x_d1_a, P_drop, 3.0, ['Task', 1]))
+        self.segments.append(Hold(P_drop, 0.7, ['Task', 0]))
+        self.segments.append(Goto(P_drop, p_safe, 3.0, ['Task', 0]))
 
+    def to_manual(self, t):
+        self.t0 = t
+        self.cseg = 0
+        self.segments = []
+        if self.ctrl_mode == 0:
+            self.mode = 'pot'
+            self.segments_for_pot(self.grabpos)
+        elif self.ctrl_mode == 1:
+            self.mode = 'joy'
+            self.segments_for_joy(self.grabpos)
+        return self.grabpos, []
+    
     def update_remove(self, t):
         if(t - self.t0 >= self.segments[self.cseg].duration()):
             self.t0    = self.t0 + self.segments[self.cseg].duration()
             self.cseg = self.cseg +1
 
             if self.cseg >= len(self.segments):
-                if len(self.aruco_loc) == 0:
-                    self.t0 = t
-                    self.cseg = 0
-                    self.segments = []
-                    if self.ctrl_mode == 0:
-                        self.mode = 'pot'
-                        self.segments_for_pot(self.grabpos)
-                    elif self.ctrl_mode == 1:
-                        self.mode = 'joy'
-                        self.segments_for_joy(self.grabpos)
-                    return self.grabpos, []
-                else:
-                    P = np.array([self.aruco_loc[0], self.aruco_loc[1], 0.01])
-                    self.append_remove_chunk(P)
-            
-                    #self.get_logger().info("sending to")
-                    #self.get_logger().info(str(P))
+                idx = 4-len(self.on_blue)//2
+                if len(self.on_blue) == 0:
+                    return self.to_manual(t)
+                P = np.array([self.on_blue[0], self.on_blue[1], 0.02])
+                self.append_remove_chunk(P, self.p_safe_dropoff[idx])
 
             magnet = self.segments[self.cseg].space()[1]
             if magnet != -1: self.em_int = magnet
@@ -391,12 +349,65 @@ class DemoNode(Node):
         
             self.prev_pos = position
         return position, []
+    
+    def append_insert_chunk(self, P_rem, P_drop):
+        x_d1_a = P_rem.copy() + np.array([0,0,0.05,0,0])
+        x_dr_a = P_drop.copy() + np.array([0,0,0.05,0,0])
+        self.chain.setjoints(self.q_safe_auto)
+        p_safe = self.chain.ptip().flatten()
+        p_safe = np.array([p_safe[0], p_safe[1], p_safe[2], 0, 0])
+        self.segments.append(Goto(p_safe, x_dr_a, 3.0, ['Task', 0]))
+        self.segments.append(Goto(x_dr_a, x_d1_a, 3.0, ['Task', 0]))
+        self.segments.append(Goto(x_d1_a, P_rem, 3.0, ['Task', 1]))
+        self.segments.append(Hold(P_rem, 0.7, ['Task', 1]))
+        self.segments.append(Goto(P_rem, x_d1_a, 3.0, ['Task', 1]))
+        self.segments.append(Goto(x_d1_a, x_dr_a, 3.0, ['Task', 1]))
+        self.segments.append(Goto(x_dr_a, P_drop, 3.0, ['Task', 1]))
+        self.segments.append(Hold(P_drop, 0.7, ['Task', 0]))
+        self.segments.append(Goto(P_drop, p_safe, 3.0, ['Task', 0]))
+
+    def update_insert(self, t):
+        if(t - self.t0 >= self.segments[self.cseg].duration()):
+            self.t0    = self.t0 + self.segments[self.cseg].duration()
+            self.cseg = self.cseg +1
+
+            if self.cseg >= len(self.segments):
+                if len(self.matches) == 0:
+                    if len(self.nomatches) != 0:
+                        move_chunk = np.array([self.nomatches[0], self.nomatches[1], 0.025, 0, 0])
+                        self.append_insert_chunk(move_chunk, self.p_overlap_dropoff)
+                    else:
+                        return self.to_manual(t)
+                else:
+                    move_chunk = self.matches[0:5]
+                    P_i = np.array([move_chunk[0], move_chunk[1], 0.025, 0., 0.])
+                    P_f = np.array([move_chunk[2], move_chunk[3], 0.07, 0., 0.])
+                    P_i[-1] = -move_chunk[4] * np.pi/180
+                    self.append_insert_chunk(P_i, P_f)
+            
+            # self.get_logger().info("DFSDHFSDHFSDFHSDHGSDHFSDF" + str(len(self.segments)))
+            magnet = self.segments[self.cseg].space()[1]
+            if magnet != -1: self.em_int = magnet
+        
+        (position, velocity) = self.segments[self.cseg].evaluate(t-self.t0)
+        
+        if (self.segments[self.cseg].space()[0] == 'Task'):
+            if len(position) == 3:
+                x = np.vstack((position.reshape(-1,1), np.array([[0.01],[0.01]])))
+            elif len(position) == 5:
+                x = position.reshape(-1,1)
+            #self.get_logger().info(str(x))
+            position = self.ikin_NR(x, np.reshape(self.prev_pos,(5,1)))
+        
+            self.prev_pos = position
+        return position, []
 
 
     def update(self, t):
         if self.mode == 'pot': return self.update_pot(t)
         if self.mode == 'joy': return self.update_joy(t)
-        if self.mode == 'auto': return self.update_remove(t)
+        if self.mode == 'auto_remove': return self.update_remove(t)
+        if self.mode == 'auto_insert': return self.update_insert(t)
         
         # once segment completed, move on to new segment
         if(t - self.t0 >= self.segments[self.cseg].duration()):
@@ -441,24 +452,18 @@ class DemoNode(Node):
 
 
         if self.mode == 'joy' or self.mode == 'pot':
-            self.publish_EM(self.em_but)
+            self.EM_pub.publish(Int32(data = self.em_but))
         else:
-            self.publish_EM(self.em_int)
+            self.EM_pub.publish(Int32(data = self.em_int))
 
-
-#
 #   Main Code
-#
 def main(args=None):
     # Initialize ROS.
     rclpy.init(args=args)
-
     # Instantiate the DEMO node.
     node = DemoNode('demo')
-
     # Spin the node until interrupted.
     rclpy.spin(node)
-
     # Shutdown the node and ROS.
     node.shutdown()
     rclpy.shutdown()
