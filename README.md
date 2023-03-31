@@ -19,6 +19,5 @@ For detecting contact between the game board and the piece during gameplay we ch
 For the manual control, there are two modes of operation. The first mode leverages 5 potentiometers in directly controlling the angles of each of the arm joints. The second mode uses a joystick to control the cartesian velocity of the tip of the robot. There is a toggle switch to switch between the two modes, as well as a toggle switch to change the z direction of the joystick (which is controlled by pressing down on the joystick). There are also 3 LEDs to indicate the status of the internal microcontroller as well as which mode is active at the time of operation. The control box is enclosed within a laser-cut acrylic box measuring 10x15x30 cm.
 ![image](https://user-images.githubusercontent.com/67039263/229214838-71733f45-5e82-41ec-9e93-c2ff21b9f35c.png)
 
-The final hardware diagram is displayed:
+The final hardware diagram is displayed below:
 ![image](https://user-images.githubusercontent.com/67039263/229214906-fbc07d53-b684-40cb-9e53-1de08e48b6b0.png)
-
