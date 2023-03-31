@@ -9,3 +9,6 @@ Our game is a variation on Operation in which the player controls a robotic arm 
 
 ## Hardware Design
 To learn more about the robot's hardware, go to [the hardware page](hardware.md).
+
+## Software Design
+To learn more about the robot's software, go to [the software page](software.md).
