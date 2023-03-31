@@ -9,14 +9,17 @@ to compute a matrix that can compute the transform from camera coordinates to ta
 table or camera location - as long as the ARUCOs are located at the same table coordinates, the position of the tags in the camera does not matter. Measuring the 
 location of the tags with sub-centimeter accuracy in the table frame allowed the camera to return table frame coordinates of points of interest with sub-centimeter 
 accuracy as well. We programmed our executable to wait until this camera setup is complete, so the robot will not move until all four ARUCOs are visible. An image of ARUCO detection is displayed below.
+
 ![image](https://user-images.githubusercontent.com/67039263/229218712-904c3884-c8e6-4bee-9ef0-86c78cd36927.png)
 
 The other use of the camera is as a color contour detector. The pieces for our game were dark pink, and the board was placed on top of green felt, so that the holes could be detected by looking for green color. Finally, the board itself was blue. We tuned the HSV intervals of the detector until it could detect the boundaries of the pieces and holes with very little noise. This contour also allowed us to obtain its centroid, and thus the center of the piece. 
 
 We attempted to obtain orientation of the pieces by using PCA; however, this only successfully worked for the bone-shaped piece. This method returned noisy and jittery angles for the other pieces. To get around this issue, we developed another method of obtaining orientation, which involved getting the line segment from the centroid to the point on the contour farthest from the centroid, and finding the angle of the segment. We were able to differentiate the bone from the other pieces using the ratio of the sides of the minimum area bounding rectangle, which was further from 1 because of its elongated shape. Thus, we could use PCA on the bone-shaped piece, and our custom orientation method on the other pieces. 
+
 ![image](https://user-images.githubusercontent.com/67039263/229219051-800eaffd-da2d-4147-9633-ab208f152795.png)
 
 Additionally, we could use the cv2.matchShapes function to measure similarity between piece and hole contours. This allowed us to match pieces to their respective holes during autonomous board setup. In the picture below, we can see dissimilarity coefficients between the red star and each of the holes. This means that the smaller the number is, the better match it is to the star. As expected, the star shaped hole contains the smallest dissimilarity coefficient. 
+
 ![image](https://user-images.githubusercontent.com/67039263/229219438-ded799be-8974-4762-8ec8-eda986423412.png)
 
 The blue color of the board was only used during the automated removal of pieces from the game board.  We fit a rectangle to the blue contour, and only remove pieces if their centroid falls within the bounds of the rectangle. 
