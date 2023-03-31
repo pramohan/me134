@@ -1,3 +1,4 @@
+[Go back](https://github.com/pramohan/me134)
 # Software Setup
 
 ## Detectors
@@ -54,3 +55,5 @@ Combining manual and autonomous motion, we have a flag in the code which determi
 
 The complete diagram of the software is shown below:
 ![image](https://user-images.githubusercontent.com/67039263/229221027-a9ded61a-69f4-4661-b06a-d841c87515ce.png)
+
+[Go back](https://github.com/pramohan/me134)
